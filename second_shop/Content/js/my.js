@@ -56,7 +56,7 @@ function page(cur, total, pagesize) {
     $('.pagination').html(html);
 }
 //根据id和url删除
-function deluser(id, e, url) {
+function banuser(id, e, url,text) {
     $.confirm({
         title: '提示',
         content: '您确定' + text + '所选吗',
@@ -140,7 +140,7 @@ function SubmitObj(obj,url,callback) {
             if (data == '1') {
                 lightyear.loading('hide');
                 $('#exampleModal').modal('hide');
-                lightyear.notify('增加成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                lightyear.notify('成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
                 setTimeout(function () { location.reload(); }, 2000);
             }
         }
@@ -155,14 +155,22 @@ function GetObj(id,url,callback){
         data: { data: id },
         success: function (data) {
             console.log(data)
-            if (data != '') {
-                
+            if (data != '') {                
                 obj = JSON.parse(data)
                 callback(obj);
             }
         }
     })
-
+}
+function deleteobj(id,url,callback) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id },
+        success: function (data) {
+            if (data == 1) callback();
+        }
+    })
 }
 function openmodal(id,callback) {
     $("#exampleModal").find("input").each(function (e, el) {

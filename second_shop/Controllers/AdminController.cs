@@ -82,6 +82,18 @@ namespace second_shop.Controllers
             BaseDal<users>.ModifyEntity(a);
             return Content("1");
         }
+        public ActionResult deleteProduct()
+        {
+           
+            IEnumerable<int> ids = Request["id"].Split(',').Select(a => Convert.ToInt32(a));
+            List<product> products = new List<product>();
+            foreach (var item in ids)
+            {
+                products.Add(new product { id = item });
+            }
+            BaseDal<product>.DeleteByIds(products);
+            return Content("1");
+        }
         #endregion
         public ActionResult Index()
         {
@@ -143,7 +155,7 @@ namespace second_shop.Controllers
             }
             List<product> products=new List<product>();
             ViewBag.cur = 1;
-            System.Linq.Expressions.Expression<Func<product, bool>> WhereLambda = a => a.isadmin == 0;
+            System.Linq.Expressions.Expression<Func<product, bool>> WhereLambda = a => a.isadmin == 1;
             switch (type)
             {
                 case "users": {
@@ -163,6 +175,18 @@ namespace second_shop.Controllers
         public ActionResult AddProduct()
         {
             var pro = JsonConvert.DeserializeObject<product>(Request["data"]);
+            //如果id不为空
+            if (pro.id != 0)
+            {                            
+               var to=BaseDal<product>.firstordefault(a=>a.id==pro.id);
+                if (pro.imgs_url == "") pro.imgs_url = to.imgs_url;
+                pro.isadmin = to.isadmin;
+                pro.view_count = to.view_count;
+                pro.publish_time = to.publish_time;
+                Exchangevalue(pro, to);
+                BaseDal<product>.ModifyEntity(to);
+                return Content("1");
+            }
             pro.publish_time = DateTime.Now.ToString("yyyy-MM-dd");
             pro.isadmin = 1;
             pro.signature = "正常";
@@ -173,16 +197,29 @@ namespace second_shop.Controllers
         {
             int id = Convert.ToInt32(Request["data"]);
             var pro=BaseDal<product>.firstordefault(a => a.id == id);
-            string jstr = JsonConvert.SerializeObject(new { pro.title,pro.id, pro.old_price, pro.phone, pro.profile, pro.wechat, pro.qq, pro.depart });
+            string jstr = JsonConvert.SerializeObject(new { pro.title,pro.id, pro.old_price, pro.phone, pro.profile, pro.wechat, pro.qq, pro.depart,pro.price });
             return Content(jstr);
         }
+
+ 
         public ActionResult ChangeProductState()
         {
-             int id= Convert.ToInt32(Request["id"]);
-             var pro =BaseDal<product>.firstordefault(a => a.id == id);
-            if (pro.signature == "正常") pro.signature = "下架";
-            else pro.signature = "正常";
-            BaseDal<product>.ModifyEntity(pro);
+            IEnumerable<int> ids = Request["id"].Split(',').Select(a => Convert.ToInt32(a));
+            List<product> products = new List<product>();
+            foreach (var item in ids)
+            {
+                var a = BaseDal<product>.firstordefault(x => x.id == item);
+                if (a.signature == "正常") a.signature = "下架";
+                else a.signature = "正常";
+                a.signature = "下架";
+                products.Add(a);
+            }
+            BaseDal<product>.UpdateMany(products);
+            //int id= Convert.ToInt32(Request["id"]);
+            // var pro =BaseDal<product>.firstordefault(a => a.id == id);
+            //if (pro.signature == "正常") pro.signature = "下架";
+            //else pro.signature = "正常";
+            //BaseDal<product>.ModifyEntity(pro);
             return Content("1");
         }
         public ActionResult uploadfile()
@@ -224,6 +261,18 @@ namespace second_shop.Controllers
                     src = dir1+currentFileName
                 }
             });
+        }
+
+        public void Exchangevalue(object from,object to)
+        {
+            Type type = from.GetType();   
+            foreach (var item in type.GetProperties())
+            {
+                if(item.GetValue(from)!=null&&to.GetType().GetProperty(item.Name)!=null)
+                {
+                    item.SetValue(to, item.GetValue(from), null);
+                }
+            }
         }
 
 
