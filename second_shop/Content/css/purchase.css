@@ -1,0 +1,57 @@
+body{
+background:#f8f8f9 !important;
+
+}
+
+a{
+    text-decoration: none;
+}
+.infor-item{
+ padding:16px; 
+ background-color: white;   
+
+ margin-bottom: 20px;
+}
+
+.infor-item:hover{
+    box-shadow: 0 1px 6px rgba(0,0,0,.2);
+    border-color: #eee;
+}
+
+@media screen and (min-width:1200px){
+    .container{
+        width: 1000px !important;
+    }
+}
+.user_infor img{
+    width: 32px;
+    height: 32px;
+}
+.user_infor span{
+    margin-left: 4px;
+}
+.nickname{
+    font-size: 14px;
+}
+
+.location,.date,.content,.phone{
+    color: #808695;
+    font-size: 12px;
+    padding: 3px 0;
+}
+
+.title
+ {
+    font-weight: 700;
+    font-size: 14px;
+    margin: 12px 0;
+}
+.tag{
+    color: #515a6e;
+    display: inline-block;
+    padding: 0 8px;
+    border: 1px solid #e8eaec;
+    border-radius: 3px;
+    font-size: 12px;
+   
+}

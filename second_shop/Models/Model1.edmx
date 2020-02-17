@@ -1,0 +1,702 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="second_shopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="useraccount" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="collection">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_id" Type="int" />
+          <Property Name="p_id" Type="int" />
+        </EntityType>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_id" Type="int" />
+          <Property Name="p_id" Type="int" />
+          <Property Name="content" Type="varchar" MaxLength="500" />
+          <Property Name="publish_time" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="index_config">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ewm_url" Type="varchar" MaxLength="100" />
+          <Property Name="qq_group" Type="varchar" MaxLength="100" />
+          <Property Name="qq" Type="varchar" MaxLength="100" />
+          <Property Name="phone" Type="varchar" MaxLength="100" />
+          <Property Name="address" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="infor">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_id" Type="int" />
+          <Property Name="content" Type="varchar" MaxLength="2000" />
+          <Property Name="publish_time" Type="varchar" MaxLength="50" />
+          <Property Name="title" Type="varchar" MaxLength="50" />
+          <Property Name="show_img" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_id" Type="int" />
+          <Property Name="title" Type="varchar" MaxLength="50" />
+          <Property Name="profile" Type="varchar" MaxLength="50" />
+          <Property Name="signature" Type="varchar" MaxLength="50" />
+          <Property Name="price" Type="int" />
+          <Property Name="old_price" Type="int" />
+          <Property Name="tags" Type="varchar" MaxLength="60" />
+          <Property Name="depart" Type="varchar" MaxLength="50" />
+          <Property Name="wechat" Type="varchar" MaxLength="50" />
+          <Property Name="qq" Type="varchar" MaxLength="50" />
+          <Property Name="phone" Type="varchar" MaxLength="50" />
+          <Property Name="imgs_url" Type="varchar" MaxLength="100" />
+          <Property Name="publish_time" Type="varchar" MaxLength="50" />
+          <Property Name="view_count" Type="int" />
+          <Property Name="isadmin" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="requirement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_id" Type="int" />
+          <Property Name="title" Type="varchar" MaxLength="50" />
+          <Property Name="profile" Type="varchar" MaxLength="50" />
+          <Property Name="price" Type="int" />
+          <Property Name="tags" Type="varchar" MaxLength="60" />
+          <Property Name="depart" Type="varchar" MaxLength="50" />
+          <Property Name="wechat" Type="varchar" MaxLength="50" />
+          <Property Name="qq" Type="varchar" MaxLength="50" />
+          <Property Name="phone" Type="varchar" MaxLength="50" />
+          <Property Name="publish_time" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="user_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="users_id" Type="int" />
+          <Property Name="p_id" Type="int" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="useraccount" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="nickname" Type="varchar" MaxLength="50" />
+          <Property Name="signature" Type="varchar" MaxLength="50" />
+          <Property Name="gender" Type="varchar" MaxLength="6" />
+          <Property Name="phone" Type="varchar" MaxLength="50" />
+          <Property Name="login_time" Type="varchar" MaxLength="50" />
+          <Property Name="register_time" Type="varchar" MaxLength="50" />
+          <Property Name="account_state" Type="int" />
+        </EntityType>
+        <Association Name="FK__collectio__users__1A14E395">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="collection" Type="Self.collection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collection">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__collection__p_id__1B0907CE">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="collection" Type="Self.collection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collection">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__comment__p_id__22AA2996">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__comment__users_i__21B6055D">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__infor__users_id__25869641">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="infor" Type="Self.infor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="infor">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__product__users_i__145C0A3F">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__requireme__users__173876EA">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="requirement" Type="Self.requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="requirement">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_hist__users__1DE57479">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="user_history" Type="Self.user_history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_history">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_histo__p_id__1ED998B2">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="user_history" Type="Self.user_history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_history">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="second_shopModelStoreContainer">
+          <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="collection" EntityType="Self.collection" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="index_config" EntityType="Self.index_config" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="infor" EntityType="Self.infor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="requirement" EntityType="Self.requirement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_history" EntityType="Self.user_history" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__collectio__users__1A14E395" Association="Self.FK__collectio__users__1A14E395">
+            <End Role="users" EntitySet="users" />
+            <End Role="collection" EntitySet="collection" />
+          </AssociationSet>
+          <AssociationSet Name="FK__collection__p_id__1B0907CE" Association="Self.FK__collection__p_id__1B0907CE">
+            <End Role="product" EntitySet="product" />
+            <End Role="collection" EntitySet="collection" />
+          </AssociationSet>
+          <AssociationSet Name="FK__comment__p_id__22AA2996" Association="Self.FK__comment__p_id__22AA2996">
+            <End Role="product" EntitySet="product" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__comment__users_i__21B6055D" Association="Self.FK__comment__users_i__21B6055D">
+            <End Role="users" EntitySet="users" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__infor__users_id__25869641" Association="Self.FK__infor__users_id__25869641">
+            <End Role="users" EntitySet="users" />
+            <End Role="infor" EntitySet="infor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__product__users_i__145C0A3F" Association="Self.FK__product__users_i__145C0A3F">
+            <End Role="users" EntitySet="users" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__requireme__users__173876EA" Association="Self.FK__requireme__users__173876EA">
+            <End Role="users" EntitySet="users" />
+            <End Role="requirement" EntitySet="requirement" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_hist__users__1DE57479" Association="Self.FK__user_hist__users__1DE57479">
+            <End Role="users" EntitySet="users" />
+            <End Role="user_history" EntitySet="user_history" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_histo__p_id__1ED998B2" Association="Self.FK__user_histo__p_id__1ED998B2">
+            <End Role="product" EntitySet="product" />
+            <End Role="user_history" EntitySet="user_history" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="second_shopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="admin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="useraccount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="collection">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_id" Type="Int32" />
+          <Property Name="p_id" Type="Int32" />
+          <NavigationProperty Name="users" Relationship="Self.FK__collectio__users__1A14E395" FromRole="collection" ToRole="users" />
+          <NavigationProperty Name="product" Relationship="Self.FK__collection__p_id__1B0907CE" FromRole="collection" ToRole="product" />
+        </EntityType>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_id" Type="Int32" />
+          <Property Name="p_id" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="publish_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="product" Relationship="Self.FK__comment__p_id__22AA2996" FromRole="comment" ToRole="product" />
+          <NavigationProperty Name="users" Relationship="Self.FK__comment__users_i__21B6055D" FromRole="comment" ToRole="users" />
+        </EntityType>
+        <EntityType Name="index_config">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ewm_url" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="qq_group" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="qq" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="infor">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_id" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="publish_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="show_img" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="users" Relationship="Self.FK__infor__users_id__25869641" FromRole="infor" ToRole="users" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_id" Type="Int32" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="profile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="signature" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="price" Type="Int32" />
+          <Property Name="old_price" Type="Int32" />
+          <Property Name="tags" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="depart" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="wechat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="qq" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="imgs_url" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="publish_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="view_count" Type="Int32" />
+          <NavigationProperty Name="collection" Relationship="Self.FK__collection__p_id__1B0907CE" FromRole="product" ToRole="collection" />
+          <NavigationProperty Name="comment" Relationship="Self.FK__comment__p_id__22AA2996" FromRole="product" ToRole="comment" />
+          <NavigationProperty Name="users" Relationship="Self.FK__product__users_i__145C0A3F" FromRole="product" ToRole="users" />
+          <NavigationProperty Name="user_history" Relationship="Self.FK__user_histo__p_id__1ED998B2" FromRole="product" ToRole="user_history" />
+          <Property Name="isadmin" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="requirement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_id" Type="Int32" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="profile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="price" Type="Int32" />
+          <Property Name="tags" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="depart" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="wechat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="qq" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="publish_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="users" Relationship="Self.FK__requireme__users__173876EA" FromRole="requirement" ToRole="users" />
+        </EntityType>
+        <EntityType Name="user_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="users_id" Type="Int32" />
+          <Property Name="p_id" Type="Int32" />
+          <NavigationProperty Name="product" Relationship="Self.FK__user_histo__p_id__1ED998B2" FromRole="user_history" ToRole="product" />
+          <NavigationProperty Name="users" Relationship="Self.FK__user_hist__users__1DE57479" FromRole="user_history" ToRole="users" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="useraccount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nickname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="signature" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="gender" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="login_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="register_time" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="account_state" Type="Int32" />
+          <NavigationProperty Name="collection" Relationship="Self.FK__collectio__users__1A14E395" FromRole="users" ToRole="collection" />
+          <NavigationProperty Name="comment" Relationship="Self.FK__comment__users_i__21B6055D" FromRole="users" ToRole="comment" />
+          <NavigationProperty Name="infor" Relationship="Self.FK__infor__users_id__25869641" FromRole="users" ToRole="infor" />
+          <NavigationProperty Name="product" Relationship="Self.FK__product__users_i__145C0A3F" FromRole="users" ToRole="product" />
+          <NavigationProperty Name="requirement" Relationship="Self.FK__requireme__users__173876EA" FromRole="users" ToRole="requirement" />
+          <NavigationProperty Name="user_history" Relationship="Self.FK__user_hist__users__1DE57479" FromRole="users" ToRole="user_history" />
+        </EntityType>
+        <Association Name="FK__collectio__users__1A14E395">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="collection" Type="Self.collection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collection">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__collection__p_id__1B0907CE">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="collection" Type="Self.collection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="collection">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__comment__p_id__22AA2996">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__comment__users_i__21B6055D">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="comment" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comment">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__infor__users_id__25869641">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="infor" Type="Self.infor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="infor">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__product__users_i__145C0A3F">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_histo__p_id__1ED998B2">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="user_history" Type="Self.user_history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_history">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__requireme__users__173876EA">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="requirement" Type="Self.requirement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="requirement">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__user_hist__users__1DE57479">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="user_history" Type="Self.user_history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_history">
+              <PropertyRef Name="users_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="second_shopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="admin" EntityType="Self.admin" />
+          <EntitySet Name="collection" EntityType="Self.collection" />
+          <EntitySet Name="comment" EntityType="Self.comment" />
+          <EntitySet Name="index_config" EntityType="Self.index_config" />
+          <EntitySet Name="infor" EntityType="Self.infor" />
+          <EntitySet Name="product" EntityType="Self.product" />
+          <EntitySet Name="requirement" EntityType="Self.requirement" />
+          <EntitySet Name="user_history" EntityType="Self.user_history" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <AssociationSet Name="FK__collectio__users__1A14E395" Association="Self.FK__collectio__users__1A14E395">
+            <End Role="users" EntitySet="users" />
+            <End Role="collection" EntitySet="collection" />
+          </AssociationSet>
+          <AssociationSet Name="FK__collection__p_id__1B0907CE" Association="Self.FK__collection__p_id__1B0907CE">
+            <End Role="product" EntitySet="product" />
+            <End Role="collection" EntitySet="collection" />
+          </AssociationSet>
+          <AssociationSet Name="FK__comment__p_id__22AA2996" Association="Self.FK__comment__p_id__22AA2996">
+            <End Role="product" EntitySet="product" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__comment__users_i__21B6055D" Association="Self.FK__comment__users_i__21B6055D">
+            <End Role="users" EntitySet="users" />
+            <End Role="comment" EntitySet="comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK__infor__users_id__25869641" Association="Self.FK__infor__users_id__25869641">
+            <End Role="users" EntitySet="users" />
+            <End Role="infor" EntitySet="infor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__product__users_i__145C0A3F" Association="Self.FK__product__users_i__145C0A3F">
+            <End Role="users" EntitySet="users" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_histo__p_id__1ED998B2" Association="Self.FK__user_histo__p_id__1ED998B2">
+            <End Role="product" EntitySet="product" />
+            <End Role="user_history" EntitySet="user_history" />
+          </AssociationSet>
+          <AssociationSet Name="FK__requireme__users__173876EA" Association="Self.FK__requireme__users__173876EA">
+            <End Role="users" EntitySet="users" />
+            <End Role="requirement" EntitySet="requirement" />
+          </AssociationSet>
+          <AssociationSet Name="FK__user_hist__users__1DE57479" Association="Self.FK__user_hist__users__1DE57479">
+            <End Role="users" EntitySet="users" />
+            <End Role="user_history" EntitySet="user_history" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="second_shopModelStoreContainer" CdmEntityContainer="second_shopEntities">
+          <EntitySetMapping Name="admin">
+            <EntityTypeMapping TypeName="second_shopModel.admin">
+              <MappingFragment StoreEntitySet="admin">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="useraccount" ColumnName="useraccount" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="collection">
+            <EntityTypeMapping TypeName="second_shopModel.collection">
+              <MappingFragment StoreEntitySet="collection">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+                <ScalarProperty Name="p_id" ColumnName="p_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comment">
+            <EntityTypeMapping TypeName="second_shopModel.comment">
+              <MappingFragment StoreEntitySet="comment">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+                <ScalarProperty Name="p_id" ColumnName="p_id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="publish_time" ColumnName="publish_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="index_config">
+            <EntityTypeMapping TypeName="second_shopModel.index_config">
+              <MappingFragment StoreEntitySet="index_config">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ewm_url" ColumnName="ewm_url" />
+                <ScalarProperty Name="qq_group" ColumnName="qq_group" />
+                <ScalarProperty Name="qq" ColumnName="qq" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="address" ColumnName="address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="infor">
+            <EntityTypeMapping TypeName="second_shopModel.infor">
+              <MappingFragment StoreEntitySet="infor">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="publish_time" ColumnName="publish_time" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="show_img" ColumnName="show_img" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product">
+            <EntityTypeMapping TypeName="second_shopModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="isadmin" ColumnName="isadmin" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="profile" ColumnName="profile" />
+                <ScalarProperty Name="signature" ColumnName="signature" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="old_price" ColumnName="old_price" />
+                <ScalarProperty Name="tags" ColumnName="tags" />
+                <ScalarProperty Name="depart" ColumnName="depart" />
+                <ScalarProperty Name="wechat" ColumnName="wechat" />
+                <ScalarProperty Name="qq" ColumnName="qq" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="imgs_url" ColumnName="imgs_url" />
+                <ScalarProperty Name="publish_time" ColumnName="publish_time" />
+                <ScalarProperty Name="view_count" ColumnName="view_count" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="requirement">
+            <EntityTypeMapping TypeName="second_shopModel.requirement">
+              <MappingFragment StoreEntitySet="requirement">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="profile" ColumnName="profile" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="tags" ColumnName="tags" />
+                <ScalarProperty Name="depart" ColumnName="depart" />
+                <ScalarProperty Name="wechat" ColumnName="wechat" />
+                <ScalarProperty Name="qq" ColumnName="qq" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="publish_time" ColumnName="publish_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_history">
+            <EntityTypeMapping TypeName="second_shopModel.user_history">
+              <MappingFragment StoreEntitySet="user_history">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="users_id" ColumnName="users_id" />
+                <ScalarProperty Name="p_id" ColumnName="p_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="second_shopModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="useraccount" ColumnName="useraccount" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="nickname" ColumnName="nickname" />
+                <ScalarProperty Name="signature" ColumnName="signature" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="login_time" ColumnName="login_time" />
+                <ScalarProperty Name="register_time" ColumnName="register_time" />
+                <ScalarProperty Name="account_state" ColumnName="account_state" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

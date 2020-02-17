@@ -1,0 +1,154 @@
+﻿body{
+    background-color:#f8f8f9;
+    font-size: 14px;
+}
+ul{
+    padding: 0;
+}
+.container {
+    background-color: #fff; 
+    overflow: hidden !important;  
+}
+.row{
+    padding: 30px 0 30px 10px;
+}
+@media (min-width:1200px){
+    .container{
+        width: 920px;
+    }
+}
+.main img{
+    width: 100%;
+    
+}
+.sub{
+    margin-top: 10px;
+}
+.sub img{
+    width: 60px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.sub-img-active{
+    width: 60px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: 2px solid #2d8cf0;
+}
+.user-infor img {
+    border-radius: 50%;
+    height: 25px;
+}
+.user-infor span{
+    margin:0 10px;
+}
+.complain{
+    display: inline-block;
+}
+.profile p {
+ margin: 10px 0;    
+}
+.profile div{
+    margin: 10px 0; 
+}
+.profile-title {
+    color: #17233d;
+    font-weight: 700;
+    font-size: 16px;
+}
+.profile-summary {
+   color: #616776;
+}
+.icon{
+    padding-right: 5px;
+    font-weight: 700;
+}
+.normal{
+    color: #808695;
+    padding-right: 10px;
+}
+.tag{
+    display: inline-block;
+    height: 22px;
+    margin: 2px 4px 2px 0;
+    padding: 0 8px;
+    border: 1px solid #e8eaec;
+    border-radius: 3px;
+    background: #f7f7f7;
+    font-size: 12px;
+    vertical-align: middle;
+    opacity: 1;
+    overflow: hidden;
+    cursor: pointer;
+    line-height: 20px;
+    background: #e6f7ff;
+    border-color: #91d5ff;
+    color: #1890ff!important
+}
+.comment{
+
+    margin-top: 30px;
+    padding: 0;
+}
+.comment-title{
+    border: 1px solid #eee;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 10px;
+}
+.comment-content{
+    padding-left: 10px;
+    position: relative;
+    min-height: 535px;
+}
+.comment-item{
+    margin-top: 20px;
+   
+}
+.empty{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+}
+.item{
+    border-bottom: 1px solid #eee;
+    min-height: 70px;
+    width: 100%;
+    display: flex;
+}
+.comment-type{
+    margin-top: 15px;
+}
+.user-contact{
+    display: inline-block;
+    height: 50px;
+    padding-left: 10px;
+}
+.user-name{
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 3px;
+}
+.time{
+    color: #808695;
+    margin-top: 10px;
+    
+}
+.user-img{
+   
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    display: inline-block;
+    overflow: hidden;
+}
+.comment-text{
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+    display: inline-block;
+    flex:1;
+}

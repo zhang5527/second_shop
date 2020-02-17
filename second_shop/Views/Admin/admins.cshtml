@@ -1,0 +1,347 @@
+﻿
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_AdlayoutPage1.cshtml";
+}
+@model  List<second_shop.Models.admin>
+<link href="~/content/css/materialdesignicons.min.css" rel="stylesheet">
+<!--对话框-->
+<link rel="stylesheet" href="~/content/js/jconfirm/jquery-confirm.min.css">
+<main class="lyear-layout-content">
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-toolbar clearfix">
+                        <form class="pull-right search-bar" method="get" action="#!" role="form">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <input type="hidden" name="search_field" id="search-field" value="title">
+                                    <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                                        标题 <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+                                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
+                                    </ul>
+                                </div>
+                                <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
+                            </div>
+                        </form>
+                        <div class="toolbar-btn-action">
+                            <button type="button" class="btn btn-primary m-r-5" data-toggle="modal" data-target="#exampleModal"><i class="mdi mdi-plus"></i> 新增</button>
+                            <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
+                            <a class="btn btn-danger" href="javascript:;" onclick=" ban('删除')"><i class="mdi mdi-window-close"></i> 删除</a>
+                        </div>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="exampleModalLabel">新增用户</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="Adduser">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="control-label">用户名</label>
+                                                <input type="text" name="useraccount" class="form-control" id="recipient-name" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="message-text" class="control-label">密码</label>
+                                                <input class="form-control" placeholder="必填" name="password" id="password" type="password" required>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary" onclick="adduser()"> 添加</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="BanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="exampleModalLabel">新增用户</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        您确定禁用选中得用户吗
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <button type="button" class="btn btn-primary" onclick="adduser()"> 确定</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            function adduser() {
+                                var obj = {};
+                                lightyear.loading('show');
+                                obj.useraccount = $('#recipient-name').val();
+                                obj.password = $('#password').val();
+                                console.log(obj);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/admin/adduser",
+                                    data: { data: JSON.stringify(obj) },
+                                    success: function (data) {
+                                        if (data == '1') {
+                                            lightyear.loading('hide');
+                                            $('#exampleModal').modal('hide');
+                                            lightyear.notify('增加成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                                            setTimeout(function () { location.reload(); }, 2000);
+                                        }
+                                    }
+                                })
+                            }
+                        </script>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="lyear-checkbox checkbox-primary">
+                                                <input type="checkbox" id="check-all"><span></span>
+                                            </label>
+                                        </th>
+                                        <th>用户名</th>
+                                        <th>昵称</th>
+                                        <th>注册时间</th>
+                                        <th>最后登录时间</th>
+                                        <th>发布量</th>
+                                        <th>评论量</th>
+                                        <th>用户状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                    <tr>
+                                        <td>
+                                            <label class="lyear-checkbox checkbox-primary">
+                                                <input type="checkbox" name="ids[]" value="@item.id"><span></span>
+                                            </label>
+                                        </td>
+                                        <td>@item.useraccount</td>
+                                        <td>@item.password</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a class="btn btn-xs btn-default" href="javascript:;" title="" onclick="deluser(@item.id,this)" data-toggle="tooltip" data-original-title="删除"><i class="mdi mdi-window-close"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <ul class="pagination">
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+    page(@ViewBag.cur, @Model.Count(), 10);
+    function deluser(id,e) {
+         $.confirm({
+        title: '提示',
+        content: '您确定' + text + '所选吗',
+        type: 'orange',
+        typeAnimated: false,
+        buttons: {
+            omg: {
+                text: '确定',
+                btnClass: 'btn-orange',
+                action: function () {
+                    $.ajax({
+                        url: '/admin/deleteadmin',
+                        type: 'post',
+                        dataType: 'text',
+                        data: "id=" + id,
+                        success: function (data) {
+                            console.log(data);
+                            if (data == '1') {
+                                lightyear.notify(text + '成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                                $(e).not('.header').parents('tr').remove();
+                            } else {
+                                lightyear.notify(text + '失败', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                            }
+                        },
+                        'error': function () {
+                            lightyear.notify('系统错误', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                        }
+                    })
+                }
+            },
+            close: {
+                text: '关闭',
+            }
+        }
+    });
+
+    }
+
+    function ban(text){
+        var ids = [];
+        var aimurl="/admin/deleteadmin";
+        // 获取选中的id
+        $('tbody input').each(function(index, el) {
+            if($(this).prop('checked')){
+               ids.push($(this).val())
+            }
+        });
+
+
+    $.confirm({
+        title: '提示',
+        content: '您确定' + text + '所选吗',
+        type: 'orange',
+        typeAnimated: false,
+        buttons: {
+            omg: {
+                text: '确定',
+                btnClass: 'btn-orange',
+                action: function () {
+                    $.ajax({
+                        url: aimurl,
+                        type: 'post',
+                        dataType: 'text',
+                        data: "id=" + ids,
+                        success: function (data) {
+                            console.log(data);
+                            if (data == '1') {
+                                lightyear.notify(text + '成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                                if (text == "禁用") {
+                                    location.reload();
+                                }
+                                 $("tbody input:checked").not('.header').parents('tr').remove();
+                            } else {
+                                lightyear.notify(text + '失败', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                            }
+                        },
+                        'error': function () {
+                                lightyear.notify('系统错误', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                        }
+                    })
+                }
+            },
+            close: {
+                text: '关闭',
+            }
+        }
+    });
+    }
+    function changeuserstate(state, id, text, e) {
+        $.ajax({
+            url: '/admin/ChangeUserState?state=' + state,
+            type: 'post',
+            dataType: 'text',
+            data: "id=" + id,
+            success: function (data) {
+                console.log(data);
+                if (data == '1') {
+                    if (state == 0) {
+                       $(e).text('禁用');
+                        $(e).removeClass("text-success");
+                        $(e).addClass("text-danger");
+                        $(e).attr("title", "点击启用");
+                        $(e).removeAttr("onclick");
+                         $(e).attr("onclick", 'changeuserstate(1, ' + id + ', "启用", this)')
+                    }
+                    else {
+                        $(e).text('正常');
+                        $(e).removeClass("text-danger");
+                        $(e).addClass("text-success");
+                        $(e).attr("title", "点击禁用");
+                        $(e).removeAttr("onclick");
+                        $(e).attr("onclick", 'changeuserstate(0, ' + id + ', "停用", this)')
+                    }
+                    lightyear.notify(text + '成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                    console.log(state)
+
+                } else {
+                    lightyear.notify(text + '失败', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                }
+            },
+            'error': function () {
+                lightyear.notify('系统错误', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+            }
+        })
+    }
+
+    function page(cur,total,pagesize) {
+        var html="";
+        var pageleft;
+        var pageright;
+        var size = Math.ceil(1.0 * total / pagesize);
+        if (size == 0) size = 1;
+        console.log(size);
+        if (cur == 1) {
+            html += '<li class="disabled"><span>«</span></li>';
+        }
+        else {
+            html+=' <li><a href="/admin/users?page='+(cur-1)+'">«</a></li>'
+        }
+        if (size <= 5) {
+            for (var i = 1; i <= size; i++) {
+                if (cur == i) {
+                    html += "<li class='active'><span>" + i + "</span></li>";
+                    continue;
+                }
+                html += "<li><a href='/admin/users?page=" + i + "'>" + i + "</a></li>";
+            }
+        }
+        else {
+            if (cur <= 3) {
+                for (var i = 1; i <= 5; i++) {
+                    if (cur == i) {
+                        html += "<li class='active'><span>"+i+"</span></li>";
+                        continue;
+                    }
+                    html += "<li><a href='/admin/users/?page=" + i + "'>" + i + "</a></li>";
+                }
+            }
+            else {
+                pageleft = cur - 2;
+                if (cur + 2 > size)
+                    pageright = size;
+                else
+                    pageright = cur + 2;
+                for (var i = pageleft; i <= pageright; i++) {
+                    if (cur == i) {
+                        html += "<li class='active'><span>"+i+"</span></li>";
+                        continue;
+                    }
+                    html += "<li><a href='/admin/users/?page=" + i + "'>" + i + "</a></li>";
+                }
+            }
+        }
+        if (cur == size) {
+            html += '<li class="disabled"><span>»</span></li>';
+        }
+        else {
+            html+=' <li><a href="/admin/users?page='+(cur+1)+'">»</a></li>'
+        }
+        console.log(html);
+        $('.pagination').html(html);
+    }
+
+</script>

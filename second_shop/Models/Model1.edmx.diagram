@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="476b23199d0945ae90a785a92b6f6452" Name="Diagram1">
+        <EntityTypeShape EntityType="second_shopModel.admin" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.collection" Width="1.5" PointX="5.25" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.comment" Width="1.5" PointX="5.25" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.index_config" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.infor" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.product" Width="1.5" PointX="3" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.requirement" Width="1.5" PointX="3" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.user_history" Width="1.5" PointX="5.25" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="second_shopModel.users" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <AssociationConnector Association="second_shopModel.FK__collectio__users__1A14E395" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__collection__p_id__1B0907CE" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__comment__p_id__22AA2996" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__comment__users_i__21B6055D" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__infor__users_id__25869641" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__product__users_i__145C0A3F" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__user_histo__p_id__1ED998B2" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__requireme__users__173876EA" ManuallyRouted="false" />
+        <AssociationConnector Association="second_shopModel.FK__user_hist__users__1DE57479" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

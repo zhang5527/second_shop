@@ -1,0 +1,363 @@
+﻿
+@{
+    ViewBag.Title = "product";
+    Layout = "~/Views/Shared/_AdlayoutPage1.cshtml";
+}
+@model  List<second_shop.Models.product>
+    <main class="lyear-layout-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-toolbar clearfix">
+                            <form class="pull-right search-bar" method="get" action="#!" role="form">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <input type="hidden" name="search_field" id="search-field" value="title">
+                                        <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                                            标题 <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+                                            <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
+                                        </ul>
+                                    </div>
+                                    <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
+                                </div>
+                            </form>
+                            <div class="toolbar-btn-action">
+                                <button type="button" class="btn btn-primary m-r-5" onclick="openmodal('#exampleModal', function () {       $('#sub').text('增加');})" @*data-toggle="modal" data-target="#exampleModal"*@><i class="mdi mdi-plus"></i> 新增</button>
+                                <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
+                                <a class="btn btn-warning m-r-5" href="#!" onclick="ban('禁用')"><i class="mdi mdi-block-helper"></i> 禁用</a>
+                                <a class="btn btn-danger" href="javascript:;" onclick=" ban('删除')"><i class="mdi mdi-window-close"></i> 删除</a>
+                            </div>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="exampleModalLabel">新增商品</h4>
+                                        </div>
+                                        <form id="AddPro">
+                                            <div class="modal-body">
+
+                                                <div class="form-group">
+                                                    <label for="title" class="control-label">商品标题</label>
+                                                    <input type="text" name="" placeholder="必填" class="form-control" id="title" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="depart" for="example-select">商品类别</label>
+                                                    <select class="form-control" id="depart" name="example-select" size="1">
+                                                        <option value="数码产品">数码产品</option>
+                                                        <option value="书籍教材">书籍教材</option>
+                                                        <option value="衣鞋帽伞">衣鞋帽伞</option>
+                                                        <option value="代步工具">代步工具</option>
+                                                        <option value="体育健身">体育健身</option>
+                                                        <option value="家用电器">家用电器</option>
+                                                        <option value="日常用品">日常用品</option>
+                                                        <option value="虚拟物品">虚拟物品</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="profile">商品简介</label>
+                                                    <div>
+                                                        <textarea class="form-control" id="profile" name="example-textarea-input" rows="3" placeholder="内容.."></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="old_price" class="control-label">原价格</label>
+                                                    <input type="text" placeholder="必填" name="useraccount" class="form-control" id="old_price" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="price" class="control-label">现价格</label>
+                                                    <input type="text" placeholder="必填" name="useraccount" class="form-control" id="price" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="price" class="control-label">qq</label>
+                                                    <input type="text" placeholder="必填" name="qq" class="form-control" id="qq" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="price" class="control-label">电话号码</label>
+                                                    <input type="text" placeholder="必填" name="phone" class="form-control" id="phone" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="recipient-name" class="control-label">商品标签</label>
+                                                    <span class="label label-info" id="recipient-name" onclick="checktags(this)" style="cursor:pointer">欢迎来撩</span>
+                                                    <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">原装正品</span>
+                                                    <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">如假包退</span>
+                                                    <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">价格可谈</span>
+                                                    <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">一口价</span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <span>上传图片:</span>
+                                                    <div class="upload" id="test1">+</div>
+                                                    <div class="layui-upload-list"></div>
+                                                    <div><button type="button" class="btn btn-danger" id="save"><i class="layui-icon ">&#xe67c;</i>点击上传</button></div>
+                                                </div>
+                                                <input type="hidden" id="imgs" class="form-control">
+                                                <input type="hidden" id="tags" value="欢迎来撩" class="form-control">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                <button type="submit" id="sub" class="btn btn-primary"> 添加</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="BanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="exampleModalLabel">新增用户</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            您确定禁用选中得用户吗
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="button" class="btn btn-primary" onclick="adduser()"> 确定</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                            function adduser() {
+                                var obj = {};
+                                lightyear.loading('show');
+                                obj.useraccount = $('#recipient-name').val();
+                                obj.password = $('#password').val();
+                                console.log(obj);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/admin/adduser",
+                                    data: { data: JSON.stringify(obj) },
+                                    success: function (data) {
+                                        if (data == '1') {
+                                            lightyear.loading('hide');
+                                            $('#exampleModal').modal('hide');
+                                            lightyear.notify('增加成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                                            setTimeout(function () { location.reload(); }, 2000);
+                                        }
+                                    }
+                                })
+                            }
+                            </script>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" id="check-all"><span></span>
+                                                </label>
+                                            </th>
+                                            <th>商品标题</th>
+                                            <th>图片</th>
+                                            <th>简介</th>
+                                            <th>分类</th>
+                                            <th>价格</th>
+                                            <th>发布时间</th>
+                                            <th>浏览量</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                        <tr>
+                                            <td>
+                                                <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" name="ids[]" value="@item.id"><span></span>
+                                                </label>
+                                            </td>
+                                            <td>@item.title</td>
+                                            <td><img src="@item.imgs_url" alt="Alternate Text" style="width:200px;height:auto" /></td>
+                                            <td>@item.depart</td>
+                                            <td>@item.price</td>
+                                            <td>@item.publish_time</td>
+                                            <td>@item.view_count</td>
+                                            <td>@item.comment.Count()</td>
+                                            @if (item.signature == "下架")
+                                            {
+                                                <td><font class="text-danger" title="点击启用" style="cursor:pointer" onclick="changestate(1, @item.id, '上架', '/admin/ChangeProductState', this)">下架</font></td>
+                                            }
+                                            else
+                                            {
+                                                <td><font class="text-success" title="点击下架" style="cursor:pointer" onclick="changestate(0, @item.id, '下架', '/admin/ChangeProductState', this)">正常</font></td>
+                                            }
+                                        <td>
+                                            <div class="btn-group">
+                                                <a class="btn btn-xs btn-default" href="javascript:;" title="" onclick="delpro(@item.id,this)" data-toggle="tooltip" data-original-title="删除"><i class="mdi mdi-window-close"></i></a>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-xs btn-default" href="javascript:;" title="" onclick="GetObj(@item.id, '/admin/getprobyid', modifypro)" data-toggle="tooltip" data-original-title="修改"><i class="mdi mdi-window-close"></i></a>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <ul class="pagination">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+<script>
+    page(@ViewBag.cur, @Model.Count(), 10);
+     function ban(text){
+        var ids = [];
+        var aimurl;
+        if (text == "禁用") {
+            aimurl = "/admin/BanProduct"
+        }
+        else {
+             aimurl = "/admin/deleteProduct"
+        }
+        // 获取选中的id
+        $('tbody input').each(function(index, el) {
+            if($(this).prop('checked')){
+               ids.push($(this).val())
+            }
+        });
+    $.confirm({
+        title: '提示',
+        content: '您确定' + text + '所选吗',
+        type: 'orange',
+        typeAnimated: false,
+        buttons: {
+            omg: {
+                text: '确定',
+                btnClass: 'btn-orange',
+                action: function () {
+                    $.ajax({
+                        url: aimurl,
+                        type: 'post',
+                        dataType: 'text',
+                        data: "id=" + ids,
+                        success: function (data) {
+                            console.log(data);
+                            if (data == '1') {
+                                lightyear.notify(text + '成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                                if (text == "禁用") {
+                                    location.reload();
+                                }
+                                 $("tbody input:checked").not('.header').parents('tr').remove();
+                            } else {
+                                lightyear.notify(text + '失败', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                            }
+                        },
+                        'error': function () {
+                                lightyear.notify('系统错误', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                        }
+                    })
+                }
+            },
+            close: {
+                text: '关闭',
+            }
+        }
+    });
+    }
+    //state 为目标状态 0 为 禁用 1 为启用
+    layui.use(['upload', 'jquery'], function () {
+        var upload = layui.upload;
+        var $ = layui.jquery;
+        var imgs = [];
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1', //绑定元素
+            multiple: true,
+            auto: false,
+            acceptMime: 'image/*',
+            bindAction: "#save",//绑定上传
+            url: '/admin/uploadfile', //上传接口
+            choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致
+                //将每次选择的文件追加到文件队列
+                files = obj.pushFile();
+                //layer.load(); //上传loading
+                obj.preview(function (index, file, result) {
+                    $(".layui-upload-list").append('<img src="' + result + '" id="remove_' + index + '" title="双击删除该图片" style="width:200px;height:auto;">')
+                    $('#remove_' + index).bind('dblclick', function () {//双击删除指定预上传图片
+                        delete files[index];//删除指定图片
+                        $(this).remove();
+                    })
+                    //console.log(1, index); //得到文件索引
+                    //console.log(2, file.name); //得到文件对象
+                    //console.log(3, result); //得到文件base64编码，比如图片
+                })
+            },
+            done: function (res) {
+               imgs = imgs.concat(res.Data)
+                console.log(imgs)
+                if (res.code==0) {
+                    layer.msg("图片上传成功！", { icon: 1, time: 1000 });
+                }
+                $('#imgs').val(res.data.src);
+                //上传完毕回调
+            },
+            error: function () {
+                //请求异常回调
+            }
+        });
+    });
+    function addpro() {
+        var obj = {};
+        obj.title = $('#title').val();
+        obj.profile = $('#profile').val();
+        obj.depart = $('#depart option:selected').val();
+        obj.imgs_url = $('#imgs').val();
+        obj.title = $('#title').val();
+        obj.price = $('#price').val();
+        obj.old_price = $('#old_price').val();
+        obj.tags = $('#tags').val();
+        obj.qq = $('#qq').val();
+        obj.phone= $('#phone').val();
+        console.log(obj);
+        SubmitObj(obj, '/admin/AddProduct', function () {
+            $('#exampleModal').modal('hide');
+            setTimeout(function () { location.reload(); }, 1000);
+        })
+    }
+    $("#AddPro").submit(function (e) {
+        console.log(2);
+        addpro();
+        return false;
+    }
+    )
+
+    function checktags(e) {
+        if ($(e).hasClass('label-info')) {
+            $(e).removeClass('label-info');
+            $(e).addClass("label-secondary");
+        }
+        else {
+                $(e).removeClass('label-secondary');
+                 $(e).addClass("label-info");
+        }
+        var tags = [];
+        $('.label-info').each(function (index, el) {
+            tags.push($(this).text());
+        })
+        $('#tags').val(tags);
+    }
+    function modifypro(obj) {
+        console.log(obj);
+        $('#exampleModal').find('input').each(function (index, el) {
+            if (obj[$(this).attr("id")] !== undefined) {
+                $(this).val(obj[$(this).attr("id")]);           
+            }
+        })
+        $('#sub').text('修改');
+        $('#exampleModal').modal('show');
+    }
+</script>
