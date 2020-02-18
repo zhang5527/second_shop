@@ -12,18 +12,15 @@ namespace second_shop.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class infor
+    public partial class complain
     {
         public int id { get; set; }
-        public Nullable<int> users_id { get; set; }
+        public Nullable<int> user_id { get; set; }
+        public Nullable<int> product_id { get; set; }
+        public Nullable<System.DateTime> complaint_time { get; set; }
         public string content { get; set; }
-        public string publish_time { get; set; }
-        public string title { get; set; }
-        public string show_img { get; set; }
-        public string profile { get; set; }
-        public string url { get; set; }
-        public string img_url { get; set; }
     
+        public virtual product product { get; set; }
         public virtual users users { get; set; }
     }
 }

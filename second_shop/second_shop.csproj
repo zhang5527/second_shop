@@ -137,6 +137,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="common\config.cs" />
     <Compile Include="common\security.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -146,11 +147,17 @@
     <Compile Include="Models\admin.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\banners.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\BaseDal.cs" />
     <Compile Include="Models\collection.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\comment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\complain.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\index_config.cs">
@@ -269,6 +276,11 @@
     <Content Include="Views\Admin\Users.cshtml" />
     <Content Include="Views\Admin\admins.cshtml" />
     <Content Include="Views\Admin\product.cshtml" />
+    <Content Include="Views\Admin\complain.cshtml" />
+    <Content Include="Views\Admin\inforlist.cshtml" />
+    <Content Include="Views\Admin\GetBanners.cshtml" />
+    <Content Include="Views\Admin\config.cshtml" />
+    <Content Include="userconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

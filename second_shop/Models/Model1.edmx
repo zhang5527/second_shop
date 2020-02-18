@@ -13,6 +13,14 @@
           <Property Name="useraccount" Type="varchar" MaxLength="50" />
           <Property Name="password" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="banners">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="banner_url" Type="varchar" MaxLength="200" />
+          <Property Name="state" Type="int" />
+        </EntityType>
         <EntityType Name="collection">
           <Key>
             <PropertyRef Name="id" />
@@ -30,6 +38,16 @@
           <Property Name="p_id" Type="int" />
           <Property Name="content" Type="varchar" MaxLength="500" />
           <Property Name="publish_time" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="complain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="product_id" Type="int" />
+          <Property Name="complaint_time" Type="datetime" />
+          <Property Name="content" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="index_config">
           <Key>
@@ -52,6 +70,9 @@
           <Property Name="publish_time" Type="varchar" MaxLength="50" />
           <Property Name="title" Type="varchar" MaxLength="50" />
           <Property Name="show_img" Type="varchar" MaxLength="50" />
+          <Property Name="profile" Type="varchar" MaxLength="500" />
+          <Property Name="url" Type="varchar" MaxLength="300" />
+          <Property Name="img_url" Type="varchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="product">
           <Key>
@@ -221,10 +242,36 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_complain_product">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="complain" Type="Self.complain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="complain">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_complain_users">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="complain" Type="Self.complain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="complain">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="second_shopModelStoreContainer">
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="banners" EntityType="Self.banners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="collection" EntityType="Self.collection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="comment" EntityType="Self.comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="complain" EntityType="Self.complain" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="index_config" EntityType="Self.index_config" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="infor" EntityType="Self.infor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
@@ -266,6 +313,14 @@
           <AssociationSet Name="FK__user_histo__p_id__1ED998B2" Association="Self.FK__user_histo__p_id__1ED998B2">
             <End Role="product" EntitySet="product" />
             <End Role="user_history" EntitySet="user_history" />
+          </AssociationSet>
+          <AssociationSet Name="FK_complain_product" Association="Self.FK_complain_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="complain" EntitySet="complain" />
+          </AssociationSet>
+          <AssociationSet Name="FK_complain_users" Association="Self.FK_complain_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="complain" EntitySet="complain" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -324,6 +379,9 @@
           <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="show_img" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="users" Relationship="Self.FK__infor__users_id__25869641" FromRole="infor" ToRole="users" />
+          <Property Name="profile" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="url" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="img_url" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="product">
           <Key>
@@ -349,6 +407,7 @@
           <NavigationProperty Name="users" Relationship="Self.FK__product__users_i__145C0A3F" FromRole="product" ToRole="users" />
           <NavigationProperty Name="user_history" Relationship="Self.FK__user_histo__p_id__1ED998B2" FromRole="product" ToRole="user_history" />
           <Property Name="isadmin" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="complain" Relationship="second_shopModel.FK_complain_product" FromRole="product" ToRole="complain" />
         </EntityType>
         <EntityType Name="requirement">
           <Key>
@@ -397,6 +456,7 @@
           <NavigationProperty Name="product" Relationship="Self.FK__product__users_i__145C0A3F" FromRole="users" ToRole="product" />
           <NavigationProperty Name="requirement" Relationship="Self.FK__requireme__users__173876EA" FromRole="users" ToRole="requirement" />
           <NavigationProperty Name="user_history" Relationship="Self.FK__user_hist__users__1DE57479" FromRole="users" ToRole="user_history" />
+          <NavigationProperty Name="complain" Relationship="second_shopModel.FK_complain_users" FromRole="users" ToRole="complain" />
         </EntityType>
         <Association Name="FK__collectio__users__1A14E395">
           <End Role="users" Type="Self.users" Multiplicity="0..1" />
@@ -552,7 +612,61 @@
             <End Role="users" EntitySet="users" />
             <End Role="user_history" EntitySet="user_history" />
           </AssociationSet>
+          <EntitySet Name="complain" EntityType="second_shopModel.complain" />
+          <AssociationSet Name="FK_complain_product" Association="second_shopModel.FK_complain_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="complain" EntitySet="complain" />
+          </AssociationSet>
+          <AssociationSet Name="FK_complain_users" Association="second_shopModel.FK_complain_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="complain" EntitySet="complain" />
+          </AssociationSet>
+          <EntitySet Name="banners" EntityType="second_shopModel.banners" />
         </EntityContainer>
+        <EntityType Name="complain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="product_id" Type="Int32" />
+          <Property Name="complaint_time" Type="DateTime" Precision="3" />
+          <Property Name="content" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="product" Relationship="second_shopModel.FK_complain_product" FromRole="complain" ToRole="product" />
+          <NavigationProperty Name="users" Relationship="second_shopModel.FK_complain_users" FromRole="complain" ToRole="users" />
+        </EntityType>
+        <Association Name="FK_complain_product">
+          <End Type="second_shopModel.product" Role="product" Multiplicity="0..1" />
+          <End Type="second_shopModel.complain" Role="complain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="complain">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_complain_users">
+          <End Type="second_shopModel.users" Role="users" Multiplicity="0..1" />
+          <End Type="second_shopModel.complain" Role="complain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="complain">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="banners">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="banner_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -603,6 +717,9 @@
           <EntitySetMapping Name="infor">
             <EntityTypeMapping TypeName="second_shopModel.infor">
               <MappingFragment StoreEntitySet="infor">
+                <ScalarProperty Name="img_url" ColumnName="img_url" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="profile" ColumnName="profile" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="users_id" ColumnName="users_id" />
                 <ScalarProperty Name="content" ColumnName="content" />
@@ -673,6 +790,26 @@
                 <ScalarProperty Name="login_time" ColumnName="login_time" />
                 <ScalarProperty Name="register_time" ColumnName="register_time" />
                 <ScalarProperty Name="account_state" ColumnName="account_state" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="complain">
+            <EntityTypeMapping TypeName="second_shopModel.complain">
+              <MappingFragment StoreEntitySet="complain">
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="complaint_time" ColumnName="complaint_time" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="banners">
+            <EntityTypeMapping TypeName="second_shopModel.banners">
+              <MappingFragment StoreEntitySet="banners">
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="banner_url" ColumnName="banner_url" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

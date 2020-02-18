@@ -20,6 +20,7 @@ namespace second_shop.Models
             this.collection = new HashSet<collection>();
             this.comment = new HashSet<comment>();
             this.user_history = new HashSet<user_history>();
+            this.complain = new HashSet<complain>();
         }
     
         public int id { get; set; }
@@ -46,5 +47,7 @@ namespace second_shop.Models
         public virtual users users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<user_history> user_history { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<complain> complain { get; set; }
     }
 }

@@ -1,0 +1,283 @@
+﻿@{
+    ViewBag.Title = "inforlist";
+    Layout = "~/Views/Shared/_AdlayoutPage1.cshtml";
+}
+@model  List<second_shop.Models.infor>
+<main class="lyear-layout-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-toolbar clearfix">
+                        <form class="pull-right search-bar" method="get" action="#!" role="form">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <input type="hidden" name="search_field" id="search-field" value="title">
+                                    <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                                        标题 <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+                                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
+                                    </ul>
+                                </div>
+                                <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
+                            </div>
+                        </form>
+                        <div class="toolbar-btn-action">
+                            <button type="button" class="btn btn-primary m-r-5" data-toggle="modal"  onclick="openmodal('#exampleModal', function () { $('#sub').text('增加');})"><i class="mdi mdi-plus"></i> 新增资讯</button>
+                            <a class="btn btn-danger" href="javascript:;" onclick=" ban('删除',this)"><i class="mdi mdi-window-close"></i>批量删除资讯</a>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="exampleModalLabel">新增资讯</h4>
+                                </div>
+                                <form id="AddInfor">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="title" class="control-label">标题</label>
+                                            <input type="text" name="title" placeholder="必填" class="form-control" id="title" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="profile">商品简介</label>
+                                            <div>
+                                                <textarea  class="form-control" id="profile" name="profile" rows="3" placeholder="内容.."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="url" class="control-label">  资讯地址</label>
+                                            <input type="text" placeholder="必填" name="url" class="form-control" id="url" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="img_url" class="control-label">  图片地址</label>
+                                            <input type="text" placeholder="必填" name="img_url" class="form-control"  id="img_url" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="old_price" class="control-label">  图片预览</label>
+                                            <img src="#" alt="预览区"  id="img_show" width="200" height="200"/>
+                                        </div>
+                                        <script>
+                                            window.onload=function () {
+                                                  var img = document.querySelector('#img_url');
+                                                  img.addEventListener("blur", function () {
+                                                document.querySelector("#img_show").setAttribute("src", img.value);
+                                            });
+                                            }
+                              
+                                        </script>
+                                        <input type="hidden" id="id" value="" class="form-control">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <button type="submit" id="sub" class="btn btn-primary"> 添加</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="lyear-checkbox checkbox-primary">
+                                                <input type="checkbox" id="check-all"><span></span>
+                                            </label>
+                                        </th>
+                                        <th>资讯标题</th>
+                                        <th>图片</th>
+                                        <th>发布时间</th>
+                                        <th>简介</th>
+                                        <th>资讯地址</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" name="ids[]" value="@item.id"><span></span>
+                                                </label>
+                                            </td>
+                                            <td>@item.title</td>
+                                            <td><img src="@item.img_url" alt="无图片"  width="100" height="50"/></td>
+                                            <td>@item.publish_time</td>
+                                            <td>@item.profile</td>
+                                            <td><a href="@item.url">@item.url</a></td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a class="btn btn-xs btn-default" href="javascript:;" title="" onclick="banuser(@item.id,this,'/admin/deleteinfor ','删除')" data-toggle="tooltip" data-original-title="删除信息"><i class="mdi mdi-window-close"></i></a>
+                                                    <a class="btn btn-xs btn-default" href="javascript:;" title="" onclick="GetObj(@item.id,'/admin/GetInforById',modifypro)" data-toggle="tooltip" data-original-title="修改信息"><i class="mdi mdi-window-close"></i></a>
+                                                </div>
+                                                <script>
+                                                    function modifypro(obj) {                                                        
+                                                        console.log(obj);
+                                                        $('#exampleModal').find('input').each(function (index, el) {
+                                                            if (obj[$(this).attr("id")] !== undefined) {
+                                                                $(this).val(obj[$(this).attr("id")]);
+                                                            }
+                                                        })
+                                                        $('#sub').text('修改');
+                                                        $('#exampleModal').modal('show');
+                                                    }
+                                                </script>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <ul class="pagination">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+        function modifypro(obj) {
+        console.log(obj);
+        $('#exampleModal').find('input').each(function (index, el) {
+            if (obj[$(this).attr("id")] !== undefined) {
+                console.log(obj[$(this).attr("id")])
+                console.log("1");
+                $(this).val(obj[$(this).attr("id")]);           
+            }           
+        })
+        $("#profile").val(obj.profile);
+         if (obj["img_url"] != "") {
+             $("#img_show").attr("src",obj["img_url"])
+         }
+        $('#sub').text('修改');
+        $('#exampleModal').modal('show');
+    }
+    page(@ViewBag.cur, @Model.Count(), 10,'/admin/inforlist');
+     function ban(text,e){
+        var ids = [];
+         var aimurl;
+         console.log($(this));
+        if (text == "禁用") {
+            aimurl = "/admin/ChangeProductState"
+        }
+        else {
+             aimurl = "/admin/deleteinfor"
+        }
+        // 获取选中的id
+        $('tbody input').each(function(index, el) {
+            if($(this).prop('checked')){
+               ids.push($(this).val())
+            }
+        });
+    $.confirm({
+        title: '提示',
+        content: '您确定' + text + '所选吗',
+        type: 'orange',
+        typeAnimated: false,
+        buttons: {
+            omg: {
+                text: '确定',
+                btnClass: 'btn-orange',
+                action: function () {
+                    $.ajax({
+                        url: aimurl,
+                        type: 'post',
+                        dataType: 'text',
+                        data: "id=" + ids,
+                        success: function (data) {
+                            console.log(data);
+                            if (data == '1') {
+                                lightyear.notify(text + '成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                                if (text == "禁用") {
+                                    location.reload()
+                                }
+                                 $("tbody input:checked").not('.header').parents('tr').remove();
+                            } else {
+                                lightyear.notify(text + '失败', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                            }
+                        },
+                        'error': function () {
+                                lightyear.notify('系统错误', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
+                        }
+                    })
+                }
+            },
+            close: {
+                text: '关闭',
+            }
+        }
+    });
+    }
+    //state 为目标状态 0 为 禁用 1 为启用
+    layui.use(['upload', 'jquery'], function () {
+        var upload = layui.upload;
+        var $ = layui.jquery;
+        var imgs = [];
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1', //绑定元素
+            multiple: true,
+            auto: false,
+            acceptMime: 'image/*',
+            bindAction: "#save",//绑定上传
+            url: '/admin/uploadfile', //上传接口
+            choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致
+                //将每次选择的文件追加到文件队列
+                files = obj.pushFile();
+                //layer.load(); //上传loading
+                obj.preview(function (index, file, result) {
+                    $(".layui-upload-list").append('<img src="' + result + '" id="remove_' + index + '" title="双击删除该图片" style="width:200px;height:auto;">')
+                    $('#remove_' + index).bind('dblclick', function () {//双击删除指定预上传图片
+                        delete files[index];//删除指定图片
+                        $(this).remove();
+                    })
+                    //console.log(1, index); //得到文件索引
+                    //console.log(2, file.name); //得到文件对象
+                    //console.log(3, result); //得到文件base64编码，比如图片
+                })
+            },
+            done: function (res) {
+               imgs = imgs.concat(res.Data)
+                console.log(imgs)
+                if (res.code==0) {
+                    layer.msg("图片上传成功！", { icon: 1, time: 1000 });
+                }
+                $('#imgs').val(res.data.src);
+                //上传完毕回调
+            },
+            error: function () {
+                //请求异常回调
+            }
+        });
+    });
+    $("#AddInfor").submit(function (e) {
+        var jsonarry = $('#AddInfor').serializeArray();
+        console.log(jsonarry);
+        var obj = GetObjFromForm(jsonarry);
+        console.log(obj);
+        SubmitObj(obj, '/admin/GetBanners', function () {
+            $('#exampleModal').modal('hide');
+            setTimeout(function () { location.reload(); }, 1000);
+        })
+        return false;
+    }
+    )
+
+    function modifypro(obj) {
+        console.log(obj);
+        $('#exampleModal').find('input').each(function (index, el) {
+            if (obj[$(this).attr("id")] !== undefined) {
+                $(this).val(obj[$(this).attr("id")]);
+            }
+        })
+        $('#sub').text('修改');
+        $('#exampleModal').modal('show');
+    }
+</script>

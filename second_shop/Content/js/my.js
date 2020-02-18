@@ -1,5 +1,5 @@
 ﻿//分页方法
-function page(cur, total, pagesize) {
+function page(cur, total, pagesize,url) {
     var html = "";
     var pageleft;
     var pageright;
@@ -10,7 +10,7 @@ function page(cur, total, pagesize) {
         html += '<li class="disabled"><span>«</span></li>';
     }
     else {
-        html += ' <li><a href="/admin/users?page=' + (cur - 1) + '">«</a></li>'
+        html += ' <li><a href="' + url + '?page=' + (cur - 1) + '">«</a></li>'
     }
     if (size <= 5) {
         for (var i = 1; i <= size; i++) {
@@ -18,7 +18,7 @@ function page(cur, total, pagesize) {
                 html += "<li class='active'><span>" + i + "</span></li>";
                 continue;
             }
-            html += "<li><a href='/admin/users?page=" + i + "'>" + i + "</a></li>";
+            html += "<li><a href='" + url + "?page=" + i + "'>" + i + "</a></li>";
         }
     }
     else {
@@ -28,7 +28,7 @@ function page(cur, total, pagesize) {
                     html += "<li class='active'><span>" + i + "</span></li>";
                     continue;
                 }
-                html += "<li><a href='/admin/users/?page=" + i + "'>" + i + "</a></li>";
+                html += "<li><a href='" + url+"?page=" + i + "'>" + i + "</a></li>";
             }
         }
         else {
@@ -42,7 +42,7 @@ function page(cur, total, pagesize) {
                     html += "<li class='active'><span>" + i + "</span></li>";
                     continue;
                 }
-                html += "<li><a href='/admin/users/?page=" + i + "'>" + i + "</a></li>";
+                html += "<li><a href='" + url + "?page=" + i + "'>" + i + "</a></li>";
             }
         }
     }
@@ -50,7 +50,7 @@ function page(cur, total, pagesize) {
         html += '<li class="disabled"><span>»</span></li>';
     }
     else {
-        html += ' <li><a href="/admin/users?page=' + (cur + 1) + '">»</a></li>'
+        html += ' <li><a href="' + url + '?page=' + (cur + 1) + '">»</a></li>'
     }
     console.log(html);
     $('.pagination').html(html);
@@ -129,6 +129,20 @@ function changestate(state, id, text, url, e) {
             lightyear.notify('系统错误', 'warning', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
         }
     })
+}
+function GetObjFromForm(jsonArray) {
+    var o = {};
+    $.each(jsonArray, function () {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
 }
 
 function SubmitObj(obj,url,callback) {

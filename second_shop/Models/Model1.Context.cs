@@ -34,5 +34,7 @@ namespace second_shop.Models
         public virtual DbSet<requirement> requirement { get; set; }
         public virtual DbSet<user_history> user_history { get; set; }
         public virtual DbSet<users> users { get; set; }
+        public virtual DbSet<complain> complain { get; set; }
+        public virtual DbSet<banners> banners { get; set; }
     }
 }

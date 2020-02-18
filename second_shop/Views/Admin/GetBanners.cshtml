@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "getbanners";
+    Layout = "~/Views/Shared/_AdlayoutPage1.cshtml";
+}
+@model  List<second_shop.Models.banners>
+<main class="lyear-layout-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-toolbar clearfix">
+                        @*<form class="pull-right search-bar" method="get" action="#!" role="form">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <input type="hidden" name="search_field" id="search-field" value="title">
+                                    <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                                        标题 <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+                                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
+                                    </ul>
+                                </div>
+                                <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
+                            </div>
+                        </form>*@
+                        <div class="toolbar-btn-action">
+                            <button type="button" class="btn btn-primary m-r-5" data-toggle="modal" onclick="openmodal('#exampleModal', function () { $('#sub').text('增加');})"><i class="mdi mdi-plus"></i> 新增轮播图</button>
+                            <a class="btn btn-danger" href="javascript:;" onclick=" ban('删除',this)"><i class="mdi mdi-window-close"></i>批量删除</a>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="exampleModalLabel">新增轮播图</h4>
+                                </div>
+                                <form id="AddInfor">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <span>上传图片:</span>
+                                            <div class="upload" id="test1">+</div>
+                                            <div class="layui-upload-list"></div>
+                                            <div><button type="button" class="btn btn-danger" id="save"><i class="layui-icon ">&#xe67c;</i>点击上传</button></div>
+                                        </div>
+                                        <script>
+                                        </script>
+                                        <input type="hidden" id="banner_url" name="banner_url" value="" class="form-control">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <button type="submit" id="sub" class="btn btn-primary"> 添加</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="lyear-checkbox checkbox-primary">
+                                                <input type="checkbox" id="check-all"><span></span>
+                                            </label>
+                                        </th>
+                                        <th>图片</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                    <tr>
+                                        <td>
+                                            <label class="lyear-checkbox checkbox-primary">
+                                                <input type="checkbox" name="ids[]" value="@item.id"><span></span>
+                                            </label>
+                                        </td>
+                                        <td><img src="@item.banner_url" alt="Alternate Text" width="200" height="200" /></td>
+                                        @if (item.state == 0)
+                                        {
+                                            <td><font class="text-danger" title="点击启用" style="cursor:pointer" onclick="changestate(1, @item.id, '上架', '/admin/ChangeBannerState', this)">停用</font></td>
+                                        }
+                                        else
+                                        {
+                                            <td><font class="text-success" title="点击下架" style="cursor:pointer" onclick="changestate(0, @item.id, '下架', '/admin/ChangeBannerState', this)">正常</font></td>
+                                        }
+                                        <td>
+                                            <div class="btn-group">
+                                                <a class="btn btn-xs btn-default" href="javascript:;" title="" onclick="banuser(@item.id,this,'/admin/DeleteBanners ','删除')" data-toggle="tooltip" data-original-title="删除"><i class="mdi mdi-window-close"></i></a>
+                                            </div>
+                                            <script>
+                                                function modifypro(obj) {
+                                                    console.log(obj);
+                                                    $('#exampleModal').find('input').each(function (index, el) {
+                                                        if (obj[$(this).attr("id")] !== undefined) {
+                                                            $(this).val(obj[$(this).attr("id")]);
+                                                        }
+                                                    })
+                                                    $('#sub').text('修改');
+                                                    $('#exampleModal').modal('show');
+                                                }
+                                            </script>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <ul class="pagination">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+
+        $("#AddInfor").submit(function (e) {
+        var jsonarry = $('#AddInfor').serializeArray();
+            console.log(jsonarry);
+            var obj = GetObjFromForm(jsonarry);
+            console.log(obj);
+            if ($('#imgs').val() == "") {            
+                    $.confirm({
+                        title: '错误提示',
+                        content: '请上传图片后，再提交表单',
+                        type: 'red',
+                        typeAnimated: true,
+                        buttons: {
+                            tryAgain: {
+                                text: '确定',
+                                btnClass: 'btn-red',
+                                action: function () {
+                                }
+                            },
+                            close: {
+                                text: '关闭'
+                            }
+                        }
+                    });               
+            }
+        SubmitObj(obj, '/admin/AddBanner', function () {
+            $('#exampleModal').modal('hide');
+            setTimeout(function () { location.reload(); }, 1000);
+        })
+        return false;
+    }
+    )
+    page(@ViewBag.cur, @Model.Count(), 10,'/admin/getbanners');
+    //state 为目标状态 0 为 禁用 1 为启用
+    layui.use(['upload', 'jquery'], function () {
+        var upload = layui.upload;
+        var $ = layui.jquery;
+        var imgs = [];
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1', //绑定元素
+            multiple: true,
+            auto: false,
+            acceptMime: 'image/*',
+            bindAction: "#save",//绑定上传
+            url: '/admin/uploadfile', //上传接口
+            choose: function (obj) { //obj参数包含的信息，跟 choose回调完全一致
+                //将每次选择的文件追加到文件队列
+                files = obj.pushFile();
+                //layer.load(); //上传loading
+                obj.preview(function (index, file, result) {
+                    $(".layui-upload-list").append('<img src="' + result + '" id="remove_' + index + '" title="双击删除该图片" style="width:200px;height:auto;">')
+                    $('#remove_' + index).bind('dblclick', function () {//双击删除指定预上传图片
+                        delete files[index];//删除指定图片
+                        $(this).remove();
+                    })
+                    //console.log(1, index); //得到文件索引
+                    //console.log(2, file.name); //得到文件对象
+                    //console.log(3, result); //得到文件base64编码，比如图片
+                })
+            },
+            done: function (res) {
+               imgs = imgs.concat(res.Data)
+                console.log(imgs)
+                if (res.code==0) {
+                    layer.msg("图片上传成功！", { icon: 1, time: 1000 });
+                }
+                $('#banner_url').val(res.data.src);
+                //上传完毕回调
+            },
+            error: function () {
+                //请求异常回调
+            }
+        });
+    });
+</script>
+

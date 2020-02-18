@@ -37,6 +37,8 @@ namespace second_shop.Controllers
         {
             string jdata = Request["data"];
             var obj = JsonConvert.DeserializeObject<users>(jdata);
+            if (obj.useraccount == "" || obj.password == "")
+                return Content("0");
             BaseDal<users>.AddEntity(obj);
             return Content("1");
         }
@@ -84,7 +86,7 @@ namespace second_shop.Controllers
         }
         public ActionResult deleteProduct()
         {
-           
+
             IEnumerable<int> ids = Request["id"].Split(',').Select(a => Convert.ToInt32(a));
             List<product> products = new List<product>();
             foreach (var item in ids)
@@ -97,10 +99,11 @@ namespace second_shop.Controllers
         #endregion
         public ActionResult Index()
         {
+            string date =DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.UsersCount = BaseDal<users>.LoadEntities(a => a != null).Count();
             ViewBag.CommentCount = BaseDal<comment>.LoadEntities(a => a != null).Count();
-            ViewBag.NewUserCount = BaseDal<users>.LoadEntities(a => a.login_time == DateTime.Now.ToString("yyyy-MM-dd")).Count();
-            ViewBag.NewCommentCount = BaseDal<users>.LoadEntities(a => a.login_time == DateTime.Now.ToString("yyyy-MM-dd")).Count();
+            ViewBag.NewUserCount = BaseDal<users>.LoadEntities(a => a.login_time == date).Count();
+            ViewBag.NewCommentCount = BaseDal<users>.LoadEntities(a => a.login_time ==date).Count();
             return View();
         }
         #region 管理员列表 
@@ -139,11 +142,13 @@ namespace second_shop.Controllers
         {
             string jdata = Request["data"];
             var obj = JsonConvert.DeserializeObject<admin>(jdata);
+            if (obj.useraccount == "" || obj.password == "")
+                return Content("0");
             BaseDal<admin>.AddEntity(obj);
             return Content("1");
         }
         #endregion
-
+        #region 商品操作
         public ActionResult product()
         {
             string type = Request["type"];
@@ -153,21 +158,22 @@ namespace second_shop.Controllers
             {
                 page = Convert.ToInt32(Request["page"]);
             }
-            List<product> products=new List<product>();
+            List<product> products = new List<product>();
             ViewBag.cur = 1;
             System.Linq.Expressions.Expression<Func<product, bool>> WhereLambda = a => a.isadmin == 1;
             switch (type)
             {
-                case "users": {
+                case "users":
+                    {
                         WhereLambda = a => a.isadmin == 0;
-                        break;    
-            }
+                        break;
+                    }
                 case "admin":
-            {
+                    {
                         WhereLambda = a => a.isadmin == 1;
                         break;
-            }
-                default:break;
+                    }
+                default: break;
             }
             products = BaseDal<product>.LoadEntitiesByPages(page, 10, out totalcount, WhereLambda, a => a.publish_time, true).ToList();
             return View(products);
@@ -177,8 +183,8 @@ namespace second_shop.Controllers
             var pro = JsonConvert.DeserializeObject<product>(Request["data"]);
             //如果id不为空
             if (pro.id != 0)
-            {                            
-               var to=BaseDal<product>.firstordefault(a=>a.id==pro.id);
+            {
+                var to = BaseDal<product>.firstordefault(a => a.id == pro.id);
                 if (pro.imgs_url == "") pro.imgs_url = to.imgs_url;
                 pro.isadmin = to.isadmin;
                 pro.view_count = to.view_count;
@@ -196,12 +202,12 @@ namespace second_shop.Controllers
         public ActionResult GetProById()
         {
             int id = Convert.ToInt32(Request["data"]);
-            var pro=BaseDal<product>.firstordefault(a => a.id == id);
-            string jstr = JsonConvert.SerializeObject(new { pro.title,pro.id, pro.old_price, pro.phone, pro.profile, pro.wechat, pro.qq, pro.depart,pro.price });
+            var pro = BaseDal<product>.firstordefault(a => a.id == id);
+            string jstr = JsonConvert.SerializeObject(new { pro.title, pro.id, pro.old_price, pro.phone, pro.profile, pro.wechat, pro.qq, pro.depart, pro.price });
             return Content(jstr);
         }
 
- 
+
         public ActionResult ChangeProductState()
         {
             IEnumerable<int> ids = Request["id"].Split(',').Select(a => Convert.ToInt32(a));
@@ -222,6 +228,152 @@ namespace second_shop.Controllers
             //BaseDal<product>.ModifyEntity(pro);
             return Content("1");
         }
+        #endregion
+        #region 投诉操作
+        public ActionResult complain()
+        {
+            int totalcount = 0;
+            int page = 1;
+            if (Request["page"] != null)
+            {
+                page = Convert.ToInt32(Request["page"]);
+            }
+            ViewBag.cur = page;
+            var complains = BaseDal<complain>.LoadEntitiesByPages(page, 10, out totalcount, a => a != null, a => a.complaint_time, true).ToList();
+            return View(complains);
+        }
+
+        public ActionResult deleteComplain()
+        {
+            IEnumerable<int> ids = Request["id"].Split(',').Select(a => Convert.ToInt32(a));
+            List<complain> complains = new List<complain>();
+            foreach (var item in ids)
+            {
+                complains.Add(new complain { id = item });
+            }
+            BaseDal<complain>.DeleteByIds(complains);
+            return Content("1");
+        }
+        #endregion
+        #region  发布文章操作 
+        public ActionResult inforlist()
+        {
+            int totalcount = 0;
+            int page = 1;
+            if (Request["page"] != null)
+            {
+                page = Convert.ToInt32(Request["page"]);
+            }
+            ViewBag.cur = page;
+            var infors = BaseDal<infor>.LoadEntitiesByPages(page, 10, out totalcount, a => a != null, a => a.publish_time, true).ToList();
+            return View(infors);
+        }
+
+        public ActionResult GetInfor()
+        {
+            var pro = JsonConvert.DeserializeObject<infor>(Request["data"]);
+            //如果id不为空
+            if (pro.id != 0)
+            {
+                var to = BaseDal<product>.firstordefault(a => a.id == pro.id);
+                pro.publish_time = to.publish_time;
+                Exchangevalue(pro, to);
+                BaseDal<product>.ModifyEntity(to);
+                return Content("1");
+            }
+            pro.publish_time = DateTime.Now.ToString("yyyy-MM-dd");
+            BaseDal<infor>.AddEntity(pro);
+            return Content("1");
+        }
+        public ActionResult GetInforById()
+        {
+            int id = Convert.ToInt32(Request["data"]);
+            var pro = BaseDal<infor>.firstordefault(a => a.id == id);
+            string jstr = JsonConvert.SerializeObject(new { pro.title, pro.id, pro.profile,pro.publish_time,pro.img_url,pro.url });
+            return Content(jstr);
+        }
+        public ActionResult deleteinfor()
+        {
+            IEnumerable<int> ids = Request["id"].Split(',').Select(a => Convert.ToInt32(a));
+            
+            List<infor> infors = new List<infor>();
+            foreach (var item in ids)
+            {
+                infors.Add(new infor { id = item });
+            }
+            BaseDal<infor>.DeleteByIds(infors);
+            return Content("1");
+        }
+
+
+
+        #endregion
+        #region 轮播图操作
+        public ActionResult GetBanners()
+        {
+            int totalcount = 0;
+            int page = 1;
+            if (Request["page"] != null)
+            {
+                page = Convert.ToInt32(Request["page"]);
+            }
+            ViewBag.cur = page;
+            var banners = BaseDal<banners>.LoadEntitiesByPages(page, 10, out totalcount, a => a != null, a => a.state, true).ToList();
+            return View(banners);
+        }
+
+        public ActionResult AddBanner()
+        {
+            var pro = JsonConvert.DeserializeObject<banners>(Request["data"]);
+            //如果id不为空
+            pro.state = 1;
+            BaseDal<banners>.AddEntity(pro);
+            return Content("1");
+        }
+        public ActionResult DeleteBanners()
+        {
+            IEnumerable<int> ids = Request["id"].Split(',').Select(a => Convert.ToInt32(a));
+            List<banners> banners = new List<banners>();
+            foreach (var item in ids)
+            {
+                banners.Add(new banners { id = item });
+            }
+            BaseDal<banners>.DeleteByIds(banners);
+            return Content("1");
+        }
+        public ActionResult ChangeBannerState()
+        {
+            int id = Convert.ToInt32(Request["id"]);
+            var obj = BaseDal<banners>.firstordefault(a => a.id == id);
+            if (obj.state == 0)
+            {
+                obj.state = 1;
+            }
+            else
+                obj.state = 0;
+            BaseDal<banners>.ModifyEntity(obj);
+            return Content("1");
+        }
+        #endregion
+
+        #region 配置操作
+        public ActionResult config()
+        {
+            FileStream stream = new FileStream(Request.MapPath("~/userconfig.json"), FileMode.OpenOrCreate, FileAccess.Read);
+             byte[] byt=new byte [stream.Length];
+            stream.Read(byt, 0, byt.Length);
+            var str = System.Text.Encoding.UTF8.GetString(byt);
+            stream.Close();
+            var obj = JsonConvert.DeserializeObject<common.config>(str);
+            return View(obj);
+        }
+        public ActionResult getconfig()
+        {
+            string content =Request["data"];
+            System.IO.File.WriteAllText(Request.MapPath("~/userconfig.json"), content);           
+            return Content("1");
+        }
+        #endregion
         public ActionResult uploadfile()
         {
             if (Request.Files. Count== 0)

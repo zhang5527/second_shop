@@ -1,9 +1,8 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Users";
     Layout = "~/Views/Shared/_AdlayoutPage1.cshtml";
 }
-
+@model  List<second_shop.Models.users>
 <main class="lyear-layout-content">
 
     <div class="container-fluid">
@@ -127,7 +126,6 @@
                                     @{int i = 1; }
                                     @foreach (var item in Model)
                                     {
-
                                     <tr>
                                         <td>
                                             <label class="lyear-checkbox checkbox-primary">
@@ -172,7 +170,7 @@
 </main>
 
 <script>
-    page(@ViewBag.cur, @Model.Count(), 10);
+    page(@ViewBag.cur, @Model.Count(), 10,'/admin/users');
 
 
     function ban(text){

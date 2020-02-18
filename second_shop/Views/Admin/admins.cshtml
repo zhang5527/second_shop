@@ -89,7 +89,7 @@
                                 console.log(obj);
                                 $.ajax({
                                     type: "POST",
-                                    url: "/admin/adduser",
+                                    url: "/admin/addadmin",
                                     data: { data: JSON.stringify(obj) },
                                     success: function (data) {
                                         if (data == '1') {
@@ -114,14 +114,8 @@
                                                 <input type="checkbox" id="check-all"><span></span>
                                             </label>
                                         </th>
-                                        <th>用户名</th>
-                                        <th>昵称</th>
-                                        <th>注册时间</th>
-                                        <th>最后登录时间</th>
-                                        <th>发布量</th>
-                                        <th>评论量</th>
-                                        <th>用户状态</th>
-                                        <th>操作</th>
+                                        <th>用户账号</th>
+                                        <th>用户密码</th>                                 
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -147,19 +141,15 @@
                         </div>
                         <ul class="pagination">
                         </ul>
-
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
-
 </main>
 
 <script>
-    page(@ViewBag.cur, @Model.Count(), 10);
+    page(@ViewBag.cur, @Model.Count(), 10,'/admin/admins');
     function deluser(id,e) {
          $.confirm({
         title: '提示',
@@ -287,61 +277,6 @@
         })
     }
 
-    function page(cur,total,pagesize) {
-        var html="";
-        var pageleft;
-        var pageright;
-        var size = Math.ceil(1.0 * total / pagesize);
-        if (size == 0) size = 1;
-        console.log(size);
-        if (cur == 1) {
-            html += '<li class="disabled"><span>«</span></li>';
-        }
-        else {
-            html+=' <li><a href="/admin/users?page='+(cur-1)+'">«</a></li>'
-        }
-        if (size <= 5) {
-            for (var i = 1; i <= size; i++) {
-                if (cur == i) {
-                    html += "<li class='active'><span>" + i + "</span></li>";
-                    continue;
-                }
-                html += "<li><a href='/admin/users?page=" + i + "'>" + i + "</a></li>";
-            }
-        }
-        else {
-            if (cur <= 3) {
-                for (var i = 1; i <= 5; i++) {
-                    if (cur == i) {
-                        html += "<li class='active'><span>"+i+"</span></li>";
-                        continue;
-                    }
-                    html += "<li><a href='/admin/users/?page=" + i + "'>" + i + "</a></li>";
-                }
-            }
-            else {
-                pageleft = cur - 2;
-                if (cur + 2 > size)
-                    pageright = size;
-                else
-                    pageright = cur + 2;
-                for (var i = pageleft; i <= pageright; i++) {
-                    if (cur == i) {
-                        html += "<li class='active'><span>"+i+"</span></li>";
-                        continue;
-                    }
-                    html += "<li><a href='/admin/users/?page=" + i + "'>" + i + "</a></li>";
-                }
-            }
-        }
-        if (cur == size) {
-            html += '<li class="disabled"><span>»</span></li>';
-        }
-        else {
-            html+=' <li><a href="/admin/users?page='+(cur+1)+'">»</a></li>'
-        }
-        console.log(html);
-        $('.pagination').html(html);
-    }
+
 
 </script>

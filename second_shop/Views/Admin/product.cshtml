@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "product";
     Layout = "~/Views/Shared/_AdlayoutPage1.cshtml";
 }
@@ -215,7 +214,7 @@
         </div>
     </main>
 <script>
-    page(@ViewBag.cur, @Model.Count(), 10);
+    page(@ViewBag.cur, @Model.Count(), 10,'/admin/product');
      function ban(text,e){
         var ids = [];
          var aimurl;

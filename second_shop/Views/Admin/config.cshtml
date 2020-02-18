@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewBag.Title = "config";
+    Layout = "~/Views/Shared/_AdlayoutPage1.cshtml";
+}
+@model  second_shop.common.config
+<main class="lyear-layout-content">
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <ul class="nav nav-tabs page-tabs">
+                        <li class="active"> <a href="#!">基本</a> </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active">
+
+                            <form action="#!" method="post" name="edit-form" class="edit-form" id="config">
+                                <div class="form-group">
+                                    <label for="web_site_logo">LOGO图片</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="logo_url" id="logo_url" value="@Model.logo_url" />
+                                        <div class="input-group-btn"><button class="btn btn-default" type="button" id="up1">上传图片</button></div>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="web_site_logo">二维码图片</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="ewm_url" id="ewm_url" value="@Model.ewm_url" />
+                                        <div class="input-group-btn"><button class="btn btn-default" type="button" id="up2">上传图片</button></div>
+                                    </div>
+                                </div>
+                                <script>
+                                    layui.use(['upload', 'jquery'], function () {
+                                        var upload = layui.upload;
+                                        var $ = layui.jquery;
+                                        var imgs = [];
+                                        //执行实例
+                                        var uploadInst = upload.render({
+                                            elem: '#up1' //绑定元素
+                                            , url: '/admin/uploadfile' //上传接口
+                                            , done: function (res) {
+                                                //上传完毕回调
+                                                $('#logo_url').val(res.data.src)
+                                            }
+                                            , error: function () {
+                                                console.log("1");
+                                            }
+                                        });
+                                        var uploadInst1 = upload.render({
+                                            elem: '#up2' //绑定元素
+                                            , url: '/admin/uploadfile' //上传接口
+                                            , done: function (res) {
+                                                //上传完毕回调
+                                                $('#ewm_url').val(res.data.src)
+                                            }
+                                            , error: function () {
+                                               console.log("1");
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <div class="form-group">
+                                    <label for="web_site_keywords">站点微信号</label>
+                                    <input class="form-control" type="text" id="wechat" name="wechat" value="@Model.wechat" placeholder="请输入站点关键词" required>
+                                    <small class="help-block">网站搜索引擎关键字</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="web_site_keywords">站点电话</label>
+                                    <input class="form-control" type="text" id="phone" name="phone" value="@Model.phone" placeholder="请输入站点关键词" required>
+                                    <small class="help-block">底部联系方式</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="web_site_keywords">站点qq群</label>
+                                    <input class="form-control" type="text" id="qqgroup" name="qqgroup" value="@Model.qqgroup" placeholder="请输入站点关键词" required>
+                                    <small class="help-block">底部联系方式</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="web_site_keywords">站点qq</label>
+                                    <input class="form-control" type="text" id="qq" name="qq" value="@Model.qq" placeholder="请输入站点关键词" required>
+                                    <small class="help-block">底部联系方式</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="web_site_description">地址</label>
+                                    <textarea class="form-control" id="address" rows="5"  name="address" placeholder="请输入地址" required>@Model.address</textarea>
+                                    <small class="help-block">底部联系方式</small>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary m-r-5">确 定</button>
+                                    <button type="submit" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+<script>
+    $('#config').submit(function () {
+        var obj = GetObjFromForm($('#config').serializeArray());
+        SubmitObj(obj, '/admin/getconfig', function () {
+        }); 
+    });
+
+</script>
