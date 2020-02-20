@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "mycollection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<second_shop.Models.collection>
+<link rel="stylesheet" href="~/Content/css/individual.css">
+<div class="container" style="margin-top:50px; margin-bottom:50px;background-color:#fff;">
+    <div class="row">
+
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <div class="nav-left">
+                <div class="nav-content">
+                    <div class="title">
+                        个人中心
+                    </div>
+                    <ul class="nav-list">
+                        <li class="title-item title-item-active"> <span class="icon "> <i class="layui-icon layui-icon-file-b"></i></span>    我的资料</li>
+                        <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-diamond"></i></span>我的商品</li>
+                        <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-camera-fill"></i></span>我的求购</li>
+                        <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-rate-solid"></i></span>我的收藏</li>
+                        <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-form"></i></span>浏览历史</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9"  style="padding-top:20px">
+            <div class="MyProduct">
+                <!-- <div class="table-responsive"> -->      
+                <input type="hidden" id="col_id" value="" />
+                <table class="table ">
+                    <caption>我的商品</caption>
+                    <thead>
+                        <tr>
+                            <th>产品名称</th>
+                            <th>上架日期</th>
+                            <th>浏览次数</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.product.title</td>
+                                <td>@item.product.publish_time</td>
+                                <td>@item.product.view_count</td>
+                                <td>
+                                    <button type="button" class="btn btn-default " onclick="function() { location.href('/home/product?p_id=@item.p_id') }">查看</button>
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#DeleteTip" onclick="$('#col_id').val('@item.id') ">删除收藏</button>
+                                </td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td>产品1</td>
+                            <td>23/11/2013</td>
+                            <td>10</td>
+                            <td>20</td>
+                            <td>
+                                <button type="button" class="btn btn-default">查看</button>
+                                <button type="button" class="btn btn-default">删除</button>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>产品1</td>
+                            <td>23/11/2013</td>
+                            <td>10</td>
+                            <td>20</td>
+                            <td>
+                                <button type="button" class="btn btn-default">查看</button>
+                                <button type="button" class="btn btn-default">删除</button>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>产品1</td>
+                            <td>23/11/2013</td>
+                            <td>10</td>
+                            <td>20</td>
+                            <td>
+                                <button type="button" class="btn btn-default">查看</button>
+                                <button type="button" class="btn btn-default">删除</button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- </div> -->
+                <nav aria-label="Page navigation" class="navigation">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="DeleteTip" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">删除</h4>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="$.post('/user/delcollection', { data: $('#col_id').val() }">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

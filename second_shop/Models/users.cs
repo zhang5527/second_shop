@@ -36,6 +36,9 @@ namespace second_shop.Models
         public string login_time { get; set; }
         public string register_time { get; set; }
         public Nullable<int> account_state { get; set; }
+        public string img_url { get; set; }
+        public string school { get; set; }
+        public string name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<collection> collection { get; set; }

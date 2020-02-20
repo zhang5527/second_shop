@@ -7,28 +7,28 @@
 <div class="banner-box">
     <div class="banner-left">
         <a class="item1">
-            <span href="#">数码产品</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=数码产品">数码产品</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
         <a class="item1">
-            <span href="#">书籍教材</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=书籍教材">书籍教材</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
         <a class="item1">
-            <span href="#">衣帽雨伞</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=衣帽雨伞">衣帽雨伞</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
         <a class="item1">
-            <span href="#">代步工具</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=代步工具">代步工具</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
         <a class="item1">
-            <span href="#">体育健身</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=体育健身">体育健身</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
         <a class="item1">
-            <span href="#">家用电器</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=家用电器">家用电器</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
         <a class="item1">
-            <span href="#">日常用品</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=日常用品">日常用品</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
         <a class="item1">
-            <span href="#">虚拟物品</span> <i class="glyphicon glyphicon-chevron-right"></i>
+            <span href="/home/index?type=虚拟物品">虚拟物品</span> <i class="glyphicon glyphicon-chevron-right"></i>
         </a>
     </div>
     <div class="banner-right carousel slide hidden-xs" id="carousel-example-generic" data-ride="carousel">
@@ -74,39 +74,42 @@
 
     </div>
     <div class="box">
-        <div class="item2">
-            <a href="#" style="display:block">
-                <div>
-                    <div class="img-box">
-                        <img src="https://api.youzixy.com/public/uploads/attach/2019/12/31/5e0aed7060046.jpg" alt="" />
-                    </div>
-                    <div class="infor-box">
-                        <p class="product-name">美女壁纸</p>
-                        <div class="common-infor">
-                            <span>更新于</span>
-                            <span>2019-10-21</span>
-                            <span style="float:right">5人浏览 </span>
+        @foreach (var item in Model)
+        {
+            <div class="item2">
+                <a href="/home/product?p_id=@item.id" style="display:block">
+                    <div>
+                        <div class="img-box">
+                            <img src="@item.imgs_url" alt="" />
                         </div>
-                        <div class="product-desc">
-                            很好看的壁纸
-                        </div>
-                        <div class="product-bottom">
-                            <div class="clearfix">
-                                <div class="clearfix"></div>
-                                <div class="product-price">
-
-                                    ￥1
-
-                                </div>
-                                <div class="product-location">
-                                    信息科技学院
+                        <div class="infor-box">
+                            <p class="product-name">@item.title</p>
+                            <div class="common-infor">
+                                <span>更新于</span>
+                                <span>@item.publish_time</span>
+                                <span style="float:right">@item.view_count 人浏览 </span>
+                            </div>
+                            <div class="product-desc">
+                                @item.profile
+                            </div>
+                            <div class="product-bottom">
+                                <div class="clearfix">
+                                    <div class="clearfix"></div>
+                                    <div class="product-price">
+                                        ￥@item.price
+                                    </div>
+                                    <div class="product-location">
+                                        天津职业技术师范大学
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
+        }
+
+
         <div class="item2">
             <a href="#" style="display:block">
                 <div>

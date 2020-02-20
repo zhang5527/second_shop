@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "infor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model second_shop.Models.users
+
+  <link rel="stylesheet" href="~/Content/css/individual.css">
+  <style>
+
+  </style>
+    
+    <div class="container" style="margin-top:50px; margin-bottom:50px;background-color:#fff;">
+        <div class="row">
+
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <div class="nav-left">
+                    <div class="nav-content">
+                        <div class="title">
+                            个人中心
+                        </div>
+                        <ul class="nav-list">
+                            <li class="title-item title-item-active"> <span class="icon "> <i class="layui-icon layui-icon-file-b"></i></span>    我的资料</li>
+                            <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-diamond"></i></span>我的商品</li>
+                            <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-camera-fill"></i></span>我的求购</li>
+                            <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-rate-solid"></i></span>我的收藏</li>
+                            <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-rate-solid"></i></span>修改密码</li>
+                            <li class="title-item"><span class="icon"> <i class="layui-icon layui-icon-form"></i></span>浏览历史</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9" style="padding-top:20px">
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">头像</label>
+                        <div class="layui-input-block">
+                            <img src="https://api.youzixy.com/public/uploads/avatar/default2.png" alt="" height="50" width="50" style="border-radius: 50%;" id="head_img">
+                        </div>
+                    </div>
+                    <script>
+                        layui.use(['upload', 'jquery'], function () {
+                            var upload = layui.upload;
+                            var $ = layui.jquery;
+                            var imgs = [];
+                            //执行实例
+                            var uploadInst = upload.render({
+                                elem: '#head_img' //绑定元素
+                                , url: '/admin/uploadfile' //上传接口
+                                , done: function (res) {
+                                    //上传完毕回调
+                                    $('#head_img').attr("src", res.data.src);
+                                    layer.msg('头像更改成功');
+                                }
+                                , error: function () {
+                                    console.log("1");
+                                }
+                            });
+                        }
+                    </script>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" required lay-verify="required" placeholder="请输入标题" autocomplete="off" value="@Model.name" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="nickname" required lay-verify="required" placeholder="请输入标题" autocomplete="off" value="@Model.nickname" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学校</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="school" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" value="@Model.school">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="gender" value="男" title="男" @if (Model.gender == "男") { Html.Raw("checked"); }>
+                            <input type="radio" name="gender" value="女" title="女" @if (Model.gender == "女") { Html.Raw("checked"); }>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">个性签名</label>
+                        <div class="layui-input-block">
+                            <textarea name="signature" placeholder="请输入内容" class="layui-textarea">@Model.signature</textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+
+                <script>
+                  //Demo
+                  layui.use('form', function(){
+                                var form = layui.form;
+                                //监听提交
+                                form.on('submit(formDemo)', function(data){
+                                    layer.msg(JSON.stringify(data.field));
+                                    $.post("/user/updateinfor", { data: json.stringify(data.field) }, function (data) {
+                                        if (data == "1")
+                                             layer.msg('更改成功');
+                                    })  
+                                    return false;
+                                });
+                            });
+                </script>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="DeleteTip" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">删除</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确定要删除吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+

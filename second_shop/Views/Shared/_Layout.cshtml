@@ -9,9 +9,24 @@
     <script src="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
-
+    <link href="~/Content/css/style.min.css" rel="stylesheet">
+    <script src="https://www.layuicdn.com/layui/layui.js"></script>
+    <script src="~/Content/js/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/perfect-scrollbar.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/lightyear.js"></script>
+    <script type="text/javascript" src="~/Content/js/main.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/my.js"></script>
+    <link href="~/Content/css/shop1.css" rel="stylesheet" />
 </head>
 <body>
+    @{
+        FileStream stream = new FileStream(Request.MapPath("~/userconfig.json"), FileMode.OpenOrCreate, FileAccess.Read);
+        byte[] byt = new byte[stream.Length];
+        stream.Read(byt, 0, byt.Length);
+        var str = System.Text.Encoding.UTF8.GetString(byt);
+        stream.Close();
+        var obj = Newtonsoft.Json.JsonConvert.DeserializeObject<second_shop.common.config>(str);
+    }
     <header id="header">
         <div class=" container-fluid nav_shop">
             <div id="log" class="log">
@@ -24,36 +39,33 @@
             </ul>
             <div class="fr">
                 @{
-                    if (Session["user"] == null)
+                    if (Session["userid"] == null)
                     {
                         <div class="login" id="login">
                             <div class="dropdown">
                                 <a data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-user"></span> 登录</a>
                             </div>
                         </div>
-
                     }
                 }
-            <ul>
-                @if (Session["user"] == null)
-                {
-                    <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal2" id="reg">注册</a></li>
-                }
-                else
-                {
-                    <li><a href="/user/home" id="reg">个人中心</a></li>
-                }
-
-                <li><a href="javascript:void(0);" data-toggle="modal" onclick="stopPublish()">发布商品</a></li>
-                <li><a href="javascript:void(0);">发布求购</a></li>
-            </ul>
-
+                <ul>
+                    @if (Session["userid"] == null)
+                    {
+                        <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal2" id="reg">注册</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="/user/home" id="reg">个人中心</a></li>
+                    }
+                    <li><a href="javascript:void(0);" data-toggle="modal" onclick="checkstate('#exampleModal')">发布商品</a></li>
+                    <li><a href="javascript:void(0);"  onclick="checkstate('#p_modal')">发布求购</a></li>
+                </ul>
             </div>
         </div>
     </header>
     @RenderBody()
     <div class="bottom">
-        <div class="container ">
+        <div class="container " style="background-color:#282c36 !important">
             <div class="row">
                 <div class="col-md-1 "></div>
                 <div class="col-md-10 ">
@@ -61,9 +73,9 @@
                         <div class="col-md-4 bottom-left">
 
                             <p>联系我们 / contact us</p>
-                            <p>Q 群：433981852</p> 
-                            <p>Q Q：184203000</p>
-                            <p>地址：广西桂林电子科技大学东区</p>
+                            <p>Q 群：@obj.qqgroup</p>
+                            <p>Q Q：@obj.qq</p>
+                            <p>地址:  @obj.address</p>
 
                         </div>
 
@@ -77,7 +89,7 @@
 
                         <div class="col-md-5 bottom-right">
                             <div>
-                                <p> TEL:17602842068</p>
+                                <p> TEL:@obj.phone</p>
                                 <div> <span class="btn btn-danger btn-lg">24小时在线客服</span>     </div>
                                 <div>  <i class="layui-icon layui-icon-login-wechat"></i> <i class="layui-icon  layui-icon-login-qq"></i>   <i class="layui-icon layui-icon-login-weibo"></i>      </div>
                             </div>
@@ -91,83 +103,180 @@
 
     </div>
 
-
-
-    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <!--登陆框头部-->
                 <div class="modal-header">
-                    <h4 class="modal-title">发布产品</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        ×
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">新增商品</h4>
                 </div>
+                <form id="AddPro">
+                    <div class="modal-body">
 
-                <!--登陆框中间部分(from表单)-->
-                <div class="modal-body">
-                    <form class="form-horizontal" role="form">
-                        <!--用户框-->
                         <div class="form-group">
-                            <label for="username" class="col-sm-2 control-label">标题</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" placeholder="" required="required" id="title">
+                            <label for="title" class="control-label">商品标题</label>
+                            <input type="text" name="" placeholder="必填" class="form-control" id="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="depart" for="example-select">商品类别</label>
+                            <select class="form-control" id="depart" name="example-select" size="1">
+                                <option value="数码产品">数码产品</option>
+                                <option value="书籍教材">书籍教材</option>
+                                <option value="衣鞋帽伞">衣鞋帽伞</option>
+                                <option value="代步工具">代步工具</option>
+                                <option value="体育健身">体育健身</option>
+                                <option value="家用电器">家用电器</option>
+                                <option value="日常用品">日常用品</option>
+                                <option value="虚拟物品">虚拟物品</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile">商品简介</label>
+                            <div>
+                                <textarea class="form-control" id="profile" name="example-textarea-input" rows="3" placeholder="内容.."></textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="username" class="col-sm-2 control-label">简介</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" rows="3" placeholder="简介" id="profile"></textarea>
-                            </div>
-                        </div>
-                        <!--密码框-->
-                        <div class="form-group">
-                            <label for="password" class="col-sm-2 control-label">标价</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control" id="noe_price" placeholder="数字，想卖的价格" required="required">
-                            </div>
+                            <label for="old_price" class="control-label">原价格</label>
+                            <input type="text" placeholder="必填" name="useraccount" class="form-control" id="old_price" required>
                         </div>
                         <div class="form-group">
-                            <label for="password" class="col-sm-2 control-label">原价</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control" id="old_price" placeholder="数字，购买的价格" required="required">
-                                <input id="imgurl" placeholder="" required="required" type="hidden">
-                            </div>
+                            <label for="price" class="control-label">现价格</label>
+                            <input type="text" placeholder="必填" name="useraccount" class="form-control" id="price" required>
                         </div>
                         <div class="form-group">
-                            <label for="password" class="col-sm-2 control-label">分类</label>
-                            <div class="col-sm-10">
-                                <div class="form-group">
-                                    <label for="sel1">单选下拉菜单:</label>
-                                    <select class="form-control" id="sort">
-                                        <option>数码产品</option>
-                                        <option>虚拟产品</option>
-                                        <option>书籍教材</option>
-                                        <option>衣帽雨伞</option>
-                                        <option>体育健身</option>
-                                        <option>家用电器</option>
-                                        <option>代步工具</option>
-                                    </select>
-                                </div>
-                            </div>
+                            <label for="price" class="control-label">qq</label>
+                            <input type="text" placeholder="必填" name="qq" class="form-control" id="qq" required>
                         </div>
                         <div class="form-group">
-                            <div class="layui-card-header">
-                                <button type="button" class="layui-btn" id="test1">
-                                    <i class="layui-icon">&#xe67c;</i>上传图片
-                                </button>
-                            </div>
+                            <label for="price" class="control-label">电话号码</label>
+                            <input type="text" placeholder="必填" name="phone" class="form-control" id="phone" required>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <a href="javascript:void(0);" class="btn btn-primary" onclick="addProduct()">发布</a>
-                            </div>
+                            <label for="recipient-name" class="control-label">商品标签</label>
+                            <span class="label label-info" id="recipient-name" onclick="checktags(this)" style="cursor:pointer">欢迎来撩</span>
+                            <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">原装正品</span>
+                            <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">如假包退</span>
+                            <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">价格可谈</span>
+                            <span class="label label-secondary" onclick="checktags(this)" style="cursor:pointer">一口价</span>
                         </div>
-                    </form>
-                </div>
+                        <div class="form-group">
+                            <span>上传图片:</span>
+                            <div class="upload" id="test1">+</div>
+                            <div class="layui-upload-list"></div>
+                            <div><button type="button" class="btn btn-danger" id="save"><i class="layui-icon ">&#xe67c;</i>点击上传</button></div>
+                        </div>
+                        <input type="hidden" id="imgs" class="form-control">
+                        <input type="hidden" id="tags" value="欢迎来撩" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" id="sub" class="btn btn-primary"> 添加</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="p_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">新增求购</h4>
+                </div>
+                <form id="AddPurchase">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title" class="control-label">求购标题</label>
+                            <input type="text" name="" placeholder="必填" class="form-control" id="p_title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile">求购简介</label>
+                            <div>
+                                <textarea class="form-control" id="p_profile" name="example-textarea-input" rows="3" placeholder="内容.." required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="old_price" class="control-label">所在地址</label>
+                            <input type="text" placeholder="必填" name="useraccount" class="form-control" id="p_address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price" class="control-label">电话号码</label>
+                            <input type="text" placeholder="必填" name="p_phone" class="form-control" id="phone" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" id="p_sub" class="btn btn-primary"> 添加</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function checkstate(target) {
+            $.get("/home/getstate", function (data) {
+                if (data == 1) {
+                    $(target).modal('show');
+                }
+                else {
+                    alert('请先登录再进行操作');
+                }
+            })
+        }
+        function addpurchase() {
+             var obj = {};
+             obj.title = $('#p_title').val();
+            obj.profile = $('#p_profile').val();
+            obj.depart = $('#p_address').val();
+            obj.phone= $('#p_phone').val();
+            SubmitObj(obj, '/user/AddRequire', function () {
+                $('#p_modal').modal('hide');           
+            })
+        }
+        function addpro() {
+            var obj = {};
+            if ($('#id').val() != "") {
+                obj.id = $('#id').val();
+            }
+            obj.title = $('#title').val();
+            obj.profile = $('#profile').val();
+            obj.depart = $('#depart option:selected').val();
+            obj.imgs_url = $('#imgs').val();
+            obj.title = $('#title').val();
+            obj.price = $('#price').val();
+            obj.old_price = $('#old_price').val();
+            obj.tags = $('#tags').val();
+            obj.qq = $('#qq').val();
+            obj.phone = $('#phone').val();
+            console.log(obj);
+            SubmitObj(obj, '/admin/AddProduct', function () {
+                $('#exampleModal').modal('hide');
+                setTimeout(function () { location.reload(); }, 1000);
+            })
+        }
+        $("#AddPro").submit(function (e) {
+            console.log(2);
+            addpro();
+            return false;
+        }
+        )
+        function checktags(e) {
+            if ($(e).hasClass('label-info')) {
+                $(e).removeClass('label-info');
+                $(e).addClass("label-secondary");
+            }
+            else {
+                $(e).removeClass('label-secondary');
+                $(e).addClass("label-info");
+            }
+            var tags = [];
+            $('.label-info').each(function (index, el) {
+                tags.push($(this).text());
+            })
+            $('#tags').val(tags);
+        }
+    </script>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -182,12 +291,12 @@
                 </div>
                 <!--登陆框中间部分(from表单)-->
                 <div class="modal-body">
-                    <form class="form-horizontal" role="form" method="post" action="/user/login">
+                    <form class="form-horizontal" role="form" method="post" action="/home/login">
                         <!--用户框-->
                         <div class="form-group">
                             <label for="username" class="col-sm-2 control-label">账户</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="username" placeholder="账户名" required="required">
+                                <input type="text" class="form-control" name="account" placeholder="账户名" required="required">
                             </div>
                         </div>
                         <!--密码框-->
@@ -222,19 +331,19 @@
                 </div>
                 <!--登陆框中间部分(from表单)-->
                 <div class="modal-body">
-                    <form class="form-horizontal" role="form" method="post" action="/user/userRegister">
+                    <form class="form-horizontal" role="form" method="post" action="/home/Register">
                         <!--用户框-->
                         <div class="form-group">
                             <label for="username" class="col-sm-2 control-label">账户</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="usernameReg" placeholder="账户名" required="required">
+                                <input type="text" class="form-control" name="account" placeholder="账户名" required="required">
                             </div>
                         </div>
                         <!--密码框-->
                         <div class="form-group">
                             <label for="password" class="col-sm-2 control-label"> 密码</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="passwordReg" placeholder="密码" required="required">
+                                <input type="password" class="form-control" name="password" placeholder="密码" required="required">
                             </div>
                         </div>
 

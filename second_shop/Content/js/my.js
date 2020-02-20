@@ -155,7 +155,7 @@ function SubmitObj(obj,url,callback) {
                 lightyear.loading('hide');
                 $('#exampleModal').modal('hide');
                 lightyear.notify('成功', 'success', 2000, 'mdi mdi-emoticon-happy', 'top', 'center');
-                setTimeout(function () { location.reload(); }, 2000);
+                //setTimeout(function () { location.reload(); }, 2000);
             }
         }
     })

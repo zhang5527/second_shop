@@ -133,6 +133,9 @@
           <Property Name="login_time" Type="varchar" MaxLength="50" />
           <Property Name="register_time" Type="varchar" MaxLength="50" />
           <Property Name="account_state" Type="int" />
+          <Property Name="img_url" Type="varchar" MaxLength="100" />
+          <Property Name="school" Type="varchar" MaxLength="20" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
         </EntityType>
         <Association Name="FK__collectio__users__1A14E395">
           <End Role="users" Type="Self.users" Multiplicity="0..1" />
@@ -457,6 +460,9 @@
           <NavigationProperty Name="requirement" Relationship="Self.FK__requireme__users__173876EA" FromRole="users" ToRole="requirement" />
           <NavigationProperty Name="user_history" Relationship="Self.FK__user_hist__users__1DE57479" FromRole="users" ToRole="user_history" />
           <NavigationProperty Name="complain" Relationship="second_shopModel.FK_complain_users" FromRole="users" ToRole="complain" />
+          <Property Name="img_url" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="school" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK__collectio__users__1A14E395">
           <End Role="users" Type="Self.users" Multiplicity="0..1" />
@@ -780,6 +786,9 @@
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="second_shopModel.users">
               <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="school" ColumnName="school" />
+                <ScalarProperty Name="img_url" ColumnName="img_url" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="useraccount" ColumnName="useraccount" />
                 <ScalarProperty Name="password" ColumnName="password" />

@@ -194,6 +194,12 @@ namespace second_shop.Controllers
                 return Content("1");
             }
             pro.publish_time = DateTime.Now.ToString("yyyy-MM-dd");
+            if (Session["userid"] != null) 
+            {
+                pro.isadmin = 0;
+                pro.users_id = Convert.ToInt32(Session["userid"]);                   
+            }
+            else
             pro.isadmin = 1;
             pro.signature = "正常";
             BaseDal<product>.AddEntity(pro);

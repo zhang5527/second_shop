@@ -1,0 +1,156 @@
+﻿
+@{
+    ViewBag.Title = "product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model second_shop.Models.product
+<link rel="stylesheet" href="~/Content/css/product.css">
+<div class="container" style="margin-top:25px; margin-bottom:50px;">
+
+    <div class="row">
+        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            <div class="show-img">
+                <div class="main">
+                    <img src="@Model.imgs_url" alt="">
+                </div>
+                <div class="sub">
+                    <img src="@Model.imgs_url" class="sub-img-active" alt="">
+                    <img src="@Model.imgs_url" alt="">
+                    <img src="@Model.imgs_url" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+            <div class="user-infor">
+                <img src="https://api.youzixy.com/public/uploads/avatar/default2.png" alt="">
+                @if (Model.isadmin == 1)
+                {
+                    <span> 官方商品</span>
+                }
+                else
+                {
+                    <span> @Model.users.nickname</span>
+                }
+
+                <div class="dropdown complain">
+                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        举报
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><a href="/user/complain?p_id=@Model.id &content=信息不实">信息不实</a></li>
+                        <li><a href="/user/complain?p_id=@Model.id &content=已经售出">已经售出</a></li>
+                        <li><a href="/user/complain?p_id=@Model.id &content=联系不上">联系不上</a></li>
+                        <li><a href="/user/complain?p_id=@Model.id &content=其他">其他</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="profile">
+                <p class="profile-title">
+                     @Model.profile
+                </p>
+                <p class="profile-summary">
+                    @Model.profile
+                </p>
+                <div>
+                    <span class="icon"><i class="layui-icon layui-icon-tabs"></i></span>
+                    <span style="color: red; padding-right: 8px;" class="">@Model.price</span> <span class="normal"> @Model.old_price</span>
+                </div>
+                <div>
+                    <span class="icon"><i class="layui-icon layui-icon-key"></i></span>
+                    <span class="tag">原装正品</span> <span class="tag">欢迎来撩</span>
+                </div>
+                <div><span class="icon"><i class="layui-icon layui-icon-location"></i></span> <span class="normal"> 天津职业技术师范大学</span> </div>
+                <div><span class="icon"><i class="layui-icon layui-icon-tree"></i></span> <span class="normal"> @Model.publish_time</span> </div>
+                <div><span class="icon"><i class="layui-icon layui-icon-cellphone"></i></span><span class="normal">手机: @Model.phone</span> <span class="normal"> 微信：@Model.phone</span> <span class="normal"> qq：@Model.qq</span> </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container comment">
+    <div class="comment-title">
+        商品评价
+        <button class="btn btn-primary btn-xs" style="float: right;" data-toggle="modal" data-target="#cmModal">发表评论</button>
+    </div>
+    <div class="comment-content">
+        <div class="comment-type">
+            <span class="tag"> 全部评论</span>
+            <span class="text-success " style="padding: 0 8px; cursor: pointer;"> 好评</span>
+            <span class="text-info" style="padding: 0 8px; cursor: pointer;"> 中评</span>
+            <span class="text-danger" style="padding: 0 8px; cursor: pointer;"> 差评</span>
+        </div>
+        <div class="comment-item">
+            <ul>
+                @foreach (var item in Model.comment)
+                {
+                    <li class="item">
+                        <img class="user-img" src="https://api.youzixy.com/public/uploads/avatar/15777718469263.png" alt="">
+                        <div class="user-contact">
+                            <p class="user-name">@item.users.useraccount</p>
+                            <p class="time">@item.publish_time</p>
+                        </div>
+                        <div class="comment-text">
+                            @item.content
+                        </div>
+                    </li>
+                }
+
+            </ul>
+        </div>
+        <!-- <img src="https://www.youzixy.com/img/noComment.a2114d18.png" alt="" class="empty"> -->
+    </div>
+</div>
+
+<div class="modal fade" id="cmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--登陆框头部-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+
+            </div>
+            <!--登陆框中间部分(from表单)-->
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <!--用户框-->
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">评论</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="comment" rows="3" placeholder="商品评论"></textarea>
+                        </div>
+                    </div>
+                    <!--密码框-->
+                    <!--记住密码-->
+                    <!--登陆按钮-->
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" onclick="">发布</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function subcomment() {
+        $.post("/user/getcomment", { comment: $('#comment').val() }, function (data) {
+            if (data === 1) {
+                layer.alert('提交成功', {
+                    icon: 5,
+                    title: "提示"
+                });
+                setTimeout(function () { location.reload() }, 700);
+            }
+            else {
+                     layer.alert('抱歉,提交失败,请先登录', {
+                    icon: 1,
+                    title: "提示"
+                });
+            }
+        })
+    }
+</script>

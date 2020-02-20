@@ -141,6 +141,8 @@
     <Compile Include="common\security.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="filter\UserCheckLogin.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,6 +283,11 @@
     <Content Include="Views\Admin\GetBanners.cshtml" />
     <Content Include="Views\Admin\config.cshtml" />
     <Content Include="userconfig.json" />
+    <Content Include="Views\User\infor.cshtml" />
+    <Content Include="Views\User\mycollection.cshtml" />
+    <Content Include="Views\Home\product.cshtml" />
+    <Content Include="Views\User\mypassword.cshtml" />
+    <Content Include="Views\User\mupurcase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -323,6 +330,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
+      <UserProperties userconfig_1json__JsonSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
